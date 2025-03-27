@@ -14,7 +14,7 @@ services:
       - .env
 
   db:
-    image: mariadb:10.6
+    image: mysql:8.0
     container_name: intro_db
     env_file:
       - .env
