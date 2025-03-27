@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+  php:
+    image: yiisoftware/yii2-php:8.2-apache
+    container_name: intro_app
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    ports:
+      - '8000:80'
+    networks:
+      - intro
+    env_file:
+      - .env
+
+  db:
+    image: mariadb:10.6
+    container_name: intro_db
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    networks:
+      - intro
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: ${PMA_HOST}
+      PMA_PORT: ${PMA_PORT}
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+    ports:
+      - "8081:80"
+    networks:
+      - intro
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
+
+networks:
+  intro:
+    driver: bridge
