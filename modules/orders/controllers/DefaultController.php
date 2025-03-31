@@ -3,6 +3,9 @@
 namespace app\modules\orders\controllers;
 
 use app\helpers\DebugHelper;
+use app\modules\orders\models\Orders;
+use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\web\Controller;
 
 class DefaultController extends Controller
@@ -11,31 +14,146 @@ class DefaultController extends Controller
     public $layout = 'ordersLayout';
     public function actionIndex(): string
     {
-        return $this->render('index', ['message' => 'all orders']);
+        $query = Orders::find()->select(['']);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionPending(): string
     {
-        return $this->render('pending', ['message' => 'pending']);
+        $query = Orders::find()->where(['status' => 0]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
+
     }
 
-    public function actionInProgress(): string
+    public function actionInprogress(): string
     {
-        return $this->render('in_progress', ['message' => 'in_progress']);
+        $query = Orders::find()->where(['status' => 1]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionCompleted(): string
     {
-        return $this->render('completed', ['message' => 'completed']);
+        $query = Orders::find()->where(['status' => 2]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionCancelled(): string
     {
-        return $this->render('cancelled', ['message' => 'cancelled']);
+        $query = Orders::find()->where(['status' => 3]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionFail(): string
     {
-        return $this->render('fail', ['message' => 'fail']);
+        $query = Orders::find()->where(['status' => 4]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 100, // количество элементов на странице
+                'pageParam' => 'page', // название параметра страницы
+                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
+                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

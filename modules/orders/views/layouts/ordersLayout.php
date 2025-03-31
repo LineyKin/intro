@@ -33,27 +33,17 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <?php
     NavBar::begin([
         'brandLabel' => "All orders",
-        'brandUrl' => 'orders',
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'brandUrl' => '/orders/',
+        'options' => ['class' => 'navbar-expand-md fixed-top']
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Pending', 'url' => ['/orders/pending']],
-            ['label' => 'In progress', 'url' => ['/orders/in_progress']],
+            ['label' => 'In progress', 'url' => ['/orders/inprogress']],
             ['label' => 'Completed', 'url' => ['/orders/completed']],
             ['label' => 'Cancelled', 'url' => ['/orders/cancelled']],
             ['label' => 'Fail', 'url' => ['/orders/fail']],
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
         ]
     ]);
     NavBar::end();
