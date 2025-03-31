@@ -16,6 +16,14 @@ class Module extends \yii\base\Module
             '@orders' => '@app/modules/orders',
         ]);
 
+        Yii::$app->i18n->translations['orders*'] = [
+            'class' => 'yii\i18n\PhpMessageSource',
+            'basePath' => '@app/modules/orders/messages',
+            'fileMap' => [
+                'orders' => 'orders.php',
+            ],
+        ];
+
         // Конфигурация модуля
         Yii::configure($this, require __DIR__ . '/config.php');
     }

@@ -55,6 +55,21 @@ $config = [
             ],
         ],
 
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
+                'orders*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@orders/messages',
+                    'fileMap' => [
+                        'orders' => 'orders.php',
+                    ],
+                ],
+            ],
+        ],
     ],
     'params' => $params,
     'modules' => [
