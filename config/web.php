@@ -48,20 +48,23 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'orders/<status:[A-Za-z]+>' => 'orders/default/',
+                'orders/change-language' => 'orders/default/change-language',
             ],
         ],
 
         'i18n' => [
             'translations' => [
-                'app*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@app/messages',
-                ],
                 'orders*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@orders/messages',
+                    'basePath' => '@app/modules/orders/messages',
                     'fileMap' => [
                         'orders' => 'orders.php',
+                    ],
+                    'forceTranslation' => true,
+                    'sourceLanguage' => 'en', // Основной язык
+                    'languageFallbacks' => [   // Цепочка fallback
+                        'en-US' => 'en',
+                        'en-UK' => 'en',
                     ],
                 ],
             ],

@@ -31,19 +31,20 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
 <header id="header">
     <?php
+    $category = 'orders';
     NavBar::begin([
-        'brandLabel' => Yii::t('app/orders', 'All orders'),
+        'brandLabel' => Yii::t($category, 'All orders'),
         'brandUrl' => '/orders/',
-        'options' => ['class' => 'navbar-expand-md fixed-top']
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => Yii::t('app/orders', 'Pending'), 'url' => ['/orders/pending']],
-            ['label' => Yii::t('app/orders', 'In progress'), 'url' => ['/orders/inprogress']],
-            ['label' => Yii::t('app/orders', 'Completed'), 'url' => ['/orders/completed']],
-            ['label' =>  Yii::t('app/orders', 'Cancelled'), 'url' => ['/orders/cancelled']],
-            ['label' =>  Yii::t('app/orders', 'Fail'), 'url' => ['/orders/fail']],
+            ['label' => Yii::t($category, 'Pending'), 'url' => ['/orders/pending']],
+            ['label' => Yii::t($category, 'In progress'), 'url' => ['/orders/inprogress']],
+            ['label' => Yii::t($category, 'Completed'), 'url' => ['/orders/completed']],
+            ['label' =>  Yii::t($category, 'Cancelled'), 'url' => ['/orders/cancelled']],
+            ['label' =>  Yii::t($category, 'Fail'), 'url' => ['/orders/fail']],
             [
                 'label' => Yii::t('app', 'Language'),
                 'items' => [

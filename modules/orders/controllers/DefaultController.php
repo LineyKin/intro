@@ -15,17 +15,10 @@ class DefaultController extends Controller
     public $layout = 'ordersLayout';
     public function actionIndex(): string
     {
-
-        //DebugHelper::pr($_GET);
-
-        //DebugHelper::pr(Yii::$app->language);
-
-        //$lang = 'ru';
-        //Yii::$app->session->set('language', $lang);
-        //Yii::$app->language = $lang;
-
-       // DebugHelper::pr(Yii::$app->language,1);
-
+        Yii::$app->language = 'en'; // Вместо en-US
+        if (Yii::$app->session->has('language')) {
+            Yii::$app->language = Yii::$app->session->get('language');
+        }
 
         $query = Orders::find();
         if (isset($_GET['status'])) {
@@ -56,8 +49,6 @@ class DefaultController extends Controller
     {
         Yii::$app->session->set('language', $lang);
 
-        Yii::$app->language = $lang;
-
-        return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 }
