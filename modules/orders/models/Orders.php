@@ -14,6 +14,14 @@ class Orders extends ActiveRecord
         "Fail",
     ];
 
+    const STATUS_ROUT_LIST = [
+        "pending",
+        "inprogress",
+        "completed",
+        "cancelled",
+        "fail",
+    ];
+
     const MOD_LIST = [
         "Manual",
         "Auto",
@@ -21,6 +29,11 @@ class Orders extends ActiveRecord
 
     public static function tableName(): string {
         return 'orders';
+    }
+
+    public  static function getStatusCode(string $status): int
+    {
+        return array_flip(self::STATUS_ROUT_LIST)[$status];
     }
 
     public function getAllOrders(): array

@@ -47,11 +47,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'orders/pending' => 'orders/default/pending',
-                '/orders/inprogress' => '/orders/default/inprogress',
-                '/orders/completed' => '/orders/default/completed',
-                '/orders/cancelled' => '/orders/default/cancelled',
-                '/orders/fail' => '/orders/default/fail',
+                'orders/<status:[A-Za-z]+>' => 'orders/default/',
             ],
         ],
 
