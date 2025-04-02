@@ -20,7 +20,7 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        $query = Orders::find();
+        $query = Orders::getQuery();
         if (isset($_GET['status'])) {
             $query->andWhere(['status' => Orders::getStatusCode($_GET['status'])]);
         }

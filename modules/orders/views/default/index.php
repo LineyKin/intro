@@ -6,14 +6,27 @@ use yii\grid\GridView;
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
-        'id',
-        'user_id',
-        'link',
-        'quantity',
-        'service_id',
-        'status',
-        'mode',
-        'created_at',
+        'ID',
+        'User',
+        'Link',
+        'Quantity',
+        'Service',
+        [
+            'attribute' => 'Status',
+            'value' => function ($model) {
+                return $model::STATUS_LIST[$model->Status] ?? $model->Status;
+            }
+        ],
+        [
+            'attribute' => 'Mode',
+            'value' => function ($model) {
+                return $model::MODE_LIST[$model->Mode] ?? $model->Mode;
+            }
+        ],
+        [
+            'attribute' => 'Created',
+            'format' => 'datetime'
+        ],
     ],
     'pager' => [
         'options' => ['class' => 'pagination'], // класс для пагинации

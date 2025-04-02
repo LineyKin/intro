@@ -69,6 +69,10 @@ $config = [
                 ],
             ],
         ],
+
+        'formatter' => [
+            'datetimeFormat' => 'php:Y-m-d H:i:s',
+        ],
     ],
     'params' => $params,
     'modules' => [

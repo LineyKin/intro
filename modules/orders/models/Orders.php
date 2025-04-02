@@ -6,6 +6,15 @@ use Yii;
 use yii\db\ActiveRecord;
 class Orders extends ActiveRecord
 {
+    public $ID;
+    public $User;
+    public $Link;
+    public $Quantity;
+    public $Service;
+    public $Status;
+    public $Mode;
+    public $Created;
+
     const STATUS_LIST = [
         "Pending",
         "In progress",
@@ -22,7 +31,7 @@ class Orders extends ActiveRecord
         "fail",
     ];
 
-    const MOD_LIST = [
+    const MODE_LIST = [
         "Manual",
         "Auto",
     ];
@@ -36,20 +45,23 @@ class Orders extends ActiveRecord
         return array_flip(self::STATUS_ROUT_LIST)[$status];
     }
 
-    public function getAllOrders(): array
+    public static function getQuery()
     {
-        $sql = "SELECT
-	                o.id AS ID,
-	                CONCAT(u.first_name, ' ', u.last_name) AS User,
-	                o.link AS Link,
-	                o.quantity AS Quantity,
-	                s.name AS Service,
-	                o.status AS Status,
-	                o.mode AS Mode,
-	                o.created_at AS Created
-                FROM orders AS o
-                INNER JOIN users AS u ON u.id = o.user_id
-                INNER JOIN services AS s ON o.service_id = s.id";
-        return Yii::$app->db->createCommand($sql)->queryAll();
+        $query = self::find();
+        $query->select([
+            "o.id AS ID",
+            "CONCAT(u.first_name, ' ', u.last_name) AS User",
+            "o.link AS Link",
+            "o.quantity AS Quantity",
+            "s.name AS Service",
+            "o.status AS Status",
+            "o.mode AS Mode",
+            "o.created_at AS Created",
+        ]);
+        $query->from("orders o");
+        $query->innerJoin("users u", "u.id = o.user_id");
+        $query->innerJoin("services s", "s.id = o.service_id");
+
+        return $query;
     }
 }
