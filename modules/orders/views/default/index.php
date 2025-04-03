@@ -12,7 +12,18 @@ use yii\grid\GridView;
         'User',
         'Link',
         'Quantity',
-        'Service',
+        [
+            'attribute' => 'Service',
+            'filter' => \yii\helpers\Html::activeDropDownList(
+                $searchModel,
+                'service_id',
+                $searchModel->getServiceGroupData(),
+                [
+                    'class' => 'form-control',
+                    'prompt' => sprintf('All (%s)', $searchModel->getServiceTotalCount()),
+                ]
+            ),
+        ],
         [
             'attribute' => 'Status',
             'value' => function ($model) {

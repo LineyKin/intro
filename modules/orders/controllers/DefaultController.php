@@ -25,6 +25,8 @@ class DefaultController extends Controller
         $searchModel->setStatus(!empty($_GET['status']) ? $_GET['status'] : null);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        //$searchModel->getServiceStat();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

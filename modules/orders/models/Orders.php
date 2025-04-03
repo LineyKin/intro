@@ -11,6 +11,7 @@ class Orders extends ActiveRecord
     public $Link;
     public $Quantity;
     public $Service;
+    public $service_id;
     public $Status;
     public $Mode;
     public $Created;
@@ -54,6 +55,7 @@ class Orders extends ActiveRecord
             "o.link AS Link",
             "o.quantity AS Quantity",
             "s.name AS Service",
+            "o.service_id",
             "o.status AS Status",
             "o.mode AS Mode",
             "o.created_at AS Created",
