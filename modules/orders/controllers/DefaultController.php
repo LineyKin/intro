@@ -4,6 +4,7 @@ namespace app\modules\orders\controllers;
 
 use app\helpers\DebugHelper;
 use app\modules\orders\models\Orders;
+use app\modules\orders\models\OrdersSearch;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -20,27 +21,12 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        $query = Orders::getQuery();
-        if (isset($_GET['status'])) {
-            $query->andWhere(['status' => Orders::getStatusCode($_GET['status'])]);
-        }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 100, // количество элементов на странице
-                'pageParam' => 'page', // название параметра страницы
-                'forcePageParam' => false, // не использовать параметр страницы, если это первая страница
-                'pageSizeParam' => 'per-page', // название параметра количества элементов на странице
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-        ]);
+        $searchModel = new OrdersSearch();
+        $searchModel->setStatus(!empty($_GET['status']) ? $_GET['status'] : null);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

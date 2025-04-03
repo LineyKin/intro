@@ -1,10 +1,12 @@
 <?php
 
+use app\modules\orders\models\Orders;
 use yii\grid\GridView;
 
 ?>
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
     'columns' => [
         'ID',
         'User',
@@ -19,6 +21,15 @@ use yii\grid\GridView;
         ],
         [
             'attribute' => 'Mode',
+            'filter' => \yii\helpers\Html::activeDropDownList(
+                $searchModel,
+                'Mode',
+                Orders::MODE_LIST,
+                [
+                    'class' => 'form-control',
+                    'prompt' => 'All',
+                ]
+            ),
             'value' => function ($model) {
                 return $model::MODE_LIST[$model->Mode] ?? $model->Mode;
             }
@@ -34,6 +45,6 @@ use yii\grid\GridView;
         'nextPageLabel' => '&raquo;', // текст для кнопки "следующая страница"
         'firstPageLabel' => 'Первая', // текст для кнопки "первая страница"
         'lastPageLabel' => 'Последняя', // текст для кнопки "последняя страница"
-        'maxButtonCount' => 5, // максимальное количество кнопок страниц
+        'maxButtonCount' => 10, // максимальное количество кнопок страниц
     ],
 ]) ?>
