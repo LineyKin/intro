@@ -11,13 +11,39 @@ class OrdersSearch extends Orders
     private $status;
     private $serviceTotalCount;
 
+    public $searchValue;
+
     public function setStatus($status)
     {
         $this->status = $status;
     }
+
+    const SCENARIO_SEARCH_ID = "id";
+    const SCENARIO_SEARCH_LINK = "link";
+    const SCENARIO_SEARCH_USER = "user";
+
+    function scenarios()
+    {
+        return [
+            self::SCENARIO_DEFAULT => ['Mode', 'service_id'],
+            self::SCENARIO_SEARCH_ID => ['searchValue'],
+            self::SCENARIO_SEARCH_LINK => ['searchValue'],
+            self::SCENARIO_SEARCH_USER => ['searchValue'],
+        ];
+    }
+
     public function rules() {
         return [
             [['Mode', 'service_id'], 'integer'],
+
+            [['searchValue'], 'required', 'on' => self::SCENARIO_SEARCH_ID],
+            [['searchValue'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
+
+            [['searchValue'], 'required', 'on' => self::SCENARIO_SEARCH_LINK],
+            [['searchValue'], 'string', 'on' => self::SCENARIO_SEARCH_LINK],
+
+            [['searchValue'], 'required', 'on' => self::SCENARIO_SEARCH_USER],
+            [['searchValue'], 'string', 'on' => self::SCENARIO_SEARCH_USER],
         ];
     }
 
@@ -43,6 +69,7 @@ class OrdersSearch extends Orders
         ]);
 
         $this->load($params);
+        $this->setAttributes($params);
 
         if (!$this->validate()) {
             return $dataProvider;
@@ -51,18 +78,17 @@ class OrdersSearch extends Orders
         $query->andFilterWhere(['mode' => $this->Mode]);
         $query->andFilterWhere(['service_id' => $this->service_id]);
 
-        if (!empty($_GET['value'])) {
-            switch ($_GET['type']) {
-                case 'id':
-                    $query->andFilterWhere(["o.id" => $_GET['value']]);
-                    break;
-                case 'link':
-                    $query->andFilterWhere(["link" => $_GET['value']]);
-                    break;
-                case 'user':
-                    $userId = Users::getIdByName($_GET['value']);
-                    $query->andFilterWhere(["o.user_id" => $userId]);
-            }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_ID) {
+            $query->andFilterWhere(["o.id" => $this->searchValue]);
+        }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_LINK) {
+            $query->andFilterWhere(["link" => $this->searchValue]);
+        }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_USER) {
+            $query->andFilterWhere(["user_id" => Users::getIdByName($this->searchValue)]);
         }
 
         return $dataProvider;

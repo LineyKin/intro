@@ -23,9 +23,12 @@ class DefaultController extends Controller
 
         $searchModel = new OrdersSearch();
         $searchModel->setStatus(!empty($_GET['status']) ? $_GET['status'] : null);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        //$searchModel->getServiceStat();
+        if (isset($_GET['searchType'])) {
+            $searchModel->scenario = $_GET['searchType'];
+        }
+
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

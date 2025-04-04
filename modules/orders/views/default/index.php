@@ -7,13 +7,17 @@ use yii\grid\GridView;
 ?>
 
 <?php
+/**
+ * TODO разобраться с вёрсткой
+ */
 $form = Html::beginForm([explode("?", $_SERVER['REQUEST_URI'])[0]], 'get', ['class' => 'form-inline my-2 my-lg-0']);
-$form .= Html::textInput('value', '', [
+$form .= Html::textInput('searchValue', '', [
     'class' => 'form-control mr-sm-2',
     'placeholder' => "Search",
-    'aria-label' => 'Search'
+    'aria-label' => 'Search',
+    'required' => true,
 ]);
-$form .= Html::dropDownList('type', '', [
+$form .= Html::dropDownList('searchType', '', [
     'id' => "Order ID",
     'link' => "Link",
     'user' => "Username",
