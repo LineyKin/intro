@@ -1,9 +1,33 @@
 <?php
 
 use app\modules\orders\models\Orders;
+use yii\bootstrap5\Html;
 use yii\grid\GridView;
 
 ?>
+
+<?php
+$form = Html::beginForm([explode("?", $_SERVER['REQUEST_URI'])[0]], 'get', ['class' => 'form-inline my-2 my-lg-0']);
+$form .= Html::textInput('value', '', [
+    'class' => 'form-control mr-sm-2',
+    'placeholder' => "Search",
+    'aria-label' => 'Search'
+]);
+$form .= Html::dropDownList('type', '', [
+    'id' => "Order ID",
+    'link' => "Link",
+    'user' => "Username",
+], [
+    'class' => 'form-control mr-sm-2'
+]);
+$form .= Html::submitButton("Search", ['class' => 'btn btn-primary'], [
+]);
+$form .= Html::endForm();
+
+echo $form;
+
+?>
+
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,

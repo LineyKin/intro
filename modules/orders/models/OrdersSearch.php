@@ -51,6 +51,20 @@ class OrdersSearch extends Orders
         $query->andFilterWhere(['mode' => $this->Mode]);
         $query->andFilterWhere(['service_id' => $this->service_id]);
 
+        if (!empty($_GET['value'])) {
+            switch ($_GET['type']) {
+                case 'id':
+                    $query->andFilterWhere(["o.id" => $_GET['value']]);
+                    break;
+                case 'link':
+                    $query->andFilterWhere(["link" => $_GET['value']]);
+                    break;
+                case 'user':
+                    $userId = Users::getIdByName($_GET['value']);
+                    $query->andFilterWhere(["o.user_id" => $userId]);
+            }
+        }
+
         return $dataProvider;
     }
 
