@@ -13,7 +13,7 @@ use Yii;
 class DefaultController extends Controller
 {
 
-    public $layout = 'ordersLayout';
+    public $layout = 'main';
     public function actionIndex(): string
     {
         Yii::$app->language = 'en'; // Вместо en-US
@@ -21,18 +21,15 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        $searchModel = new OrdersSearch();
-        $searchModel->setStatus(!empty($_GET['status']) ? $_GET['status'] : null);
+        // Регистрируем CSS-файл (относительно корневой папки `web`)
+        $this->getView()->registerCssFile('/css/custom.css', [
+            'depends' => [yii\web\YiiAsset::class], // опционально: зависимости
+        ]);
 
-        if (isset($_GET['searchType'])) {
-            $searchModel->scenario = $_GET['searchType'];
-        }
-
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $message = "good view will be here";
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'message' => $message
         ]);
     }
 
