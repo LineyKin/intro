@@ -21,15 +21,11 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        // Регистрируем CSS-файл (относительно корневой папки `web`)
-        $this->getView()->registerCssFile('/css/custom.css', [
-            'depends' => [yii\web\YiiAsset::class], // опционально: зависимости
-        ]);
-
         $message = "good view will be here";
 
         return $this->render('index', [
-            'message' => $message
+            'message' => $message,
+            'hideNavbar' => true,
         ]);
     }
 
