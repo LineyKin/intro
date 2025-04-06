@@ -1,4 +1,8 @@
+<?php
+use yii\bootstrap5\Nav;
+use yii\bootstrap5\NavBar;
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,15 +45,34 @@
     </div>
 </nav>
 <div class="container-fluid">
-    <ul class="nav nav-tabs p-b">
-        <li class="active"><a href="#">All orders</a></li>
-        <li><a href="#">Pending</a></li>
-        <li><a href="#">In progress</a></li>
-        <li><a href="#">Completed</a></li>
-        <li><a href="#">Canceled</a></li>
-        <li><a href="#">Error</a></li>
-        <li class="pull-right custom-search">
-            <form class="form-inline" action="/admin/orders" method="get">
+
+     <?php
+    $category = 'orders';
+    NavBar::begin([
+        'brandLabel' => Yii::t($category, 'All orders'),
+        'brandUrl' => '/orders/',
+        'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top']
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => Yii::t($category, 'Pending'), 'url' => ['/orders/pending']],
+            ['label' => Yii::t($category, 'In progress'), 'url' => ['/orders/inprogress']],
+            ['label' => Yii::t($category, 'Completed'), 'url' => ['/orders/completed']],
+            ['label' =>  Yii::t($category, 'Cancelled'), 'url' => ['/orders/cancelled']],
+            ['label' =>  Yii::t($category, 'Fail'), 'url' => ['/orders/fail']],
+            [
+                'label' => Yii::t('app', 'Language'),
+                'items' => [
+                    ['label' => 'English', 'url' => ['/orders/change-language', 'lang' => 'en']],
+                    ['label' => 'Русский', 'url' => ['/orders/change-language', 'lang' => 'ru']],
+                ],
+            ],
+        ]
+    ]); ?>
+
+    <li class="pull-right custom-search">
+            <form class="form-inline" action=<?php $_SERVER['REQUEST_URI']?>>
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" value="" placeholder="Search orders">
                     <span class="input-group-btn search-select-wrap">
@@ -64,18 +87,19 @@
                 </div>
             </form>
         </li>
-    </ul>
+   <?php NavBar::end();?>
+
     <table class="table order-table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>User</th>
-            <th>Link</th>
-            <th>Quantity</th>
+            <th><?php echo Yii::t($category, 'User')?></th>
+            <th><?php echo Yii::t($category, 'Link')?></th>
+            <th><?php echo Yii::t($category, 'Quantity')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Service
+                        <?php echo Yii::t($category, 'Service')?>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -90,11 +114,11 @@
                     </ul>
                 </div>
             </th>
-            <th>Status</th>
+            <th><?php echo Yii::t($category, 'Status')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Mode
+                        <?php echo Yii::t($category, 'Mode')?>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -104,7 +128,7 @@
                     </ul>
                 </div>
             </th>
-            <th>Created</th>
+            <th><?php echo Yii::t($category, 'Created')?></th>
         </tr>
         </thead>
         <tbody>

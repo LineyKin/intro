@@ -21,11 +21,12 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
+        //DebugHelper::pr($_GET,1);
+
         $message = "good view will be here";
 
         return $this->render('index', [
             'message' => $message,
-            'hideNavbar' => true,
         ]);
     }
 

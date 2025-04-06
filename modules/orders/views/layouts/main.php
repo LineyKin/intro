@@ -19,6 +19,11 @@ $this->registerMetaTag(['name' => 'description', 'content' => $this->params['met
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
 $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::getAlias('@web/favicon.ico')]);
 
+//$this->registerCssFile("@web/css/custom.css", ["depends" => ['yii\web\YiiAsset', 'yii\bootstrap5\BootstrapAsset']]);
+//$this->registerCssFile("@web/css/bootsrap.min.css", ["depends" => ['yii\web\YiiAsset', 'yii\bootstrap5\BootstrapAsset']]);
+//$this->registerJsFile("@web/js/jquery.min.js", ["depends" => ['yii\web\YiiAsset', 'yii\bootstrap5\BootstrapAsset']]);
+//$this->registerJsFile("@web/js/bootsrap.min.js", ["depends" => ['yii\web\YiiAsset', 'yii\bootstrap5\BootstrapAsset']]);
+
 ?>
 
 <?php $this->beginPage() ?>
