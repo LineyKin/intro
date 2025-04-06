@@ -17,14 +17,6 @@ class Orders extends ActiveRecord
     public $Created;
 
     const STATUS_LIST = [
-        "Pending",
-        "In progress",
-        "Completed",
-        "Cancelled",
-        "Fail",
-    ];
-
-    const STATUS_ROUT_LIST = [
         "pending",
         "inprogress",
         "completed",
@@ -41,12 +33,12 @@ class Orders extends ActiveRecord
         return 'orders';
     }
 
-    public  static function getStatusCode(string $status): int
+    public static function getStatusCode(string $status): int
     {
-        return array_flip(self::STATUS_ROUT_LIST)[$status];
+        return array_flip(self::STATUS_LIST)[$status];
     }
 
-    public static function getQuery()
+    public static function getQuery($params)
     {
         $query = self::find();
         $query->select([
@@ -63,6 +55,14 @@ class Orders extends ActiveRecord
         $query->from("orders o");
         $query->innerJoin("users u", "u.id = o.user_id");
         $query->innerJoin("services s", "s.id = o.service_id");
+
+        if (isset($params['status'])) {
+            $query->andFilterWhere(['o.status' => Orders::getStatusCode($params['status'])]);
+        }
+
+
+        // заглушка на время разработки
+        $query->limit(10);
 
         return $query;
     }

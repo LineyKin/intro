@@ -21,12 +21,11 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        //DebugHelper::pr($_GET,1);
-
-        $message = "good view will be here";
+        $q = Orders::getQuery(Yii::$app->request->get());
+        $data = $q->asArray()->all();
 
         return $this->render('index', [
-            'message' => $message,
+            'data' => $data,
         ]);
     }
 

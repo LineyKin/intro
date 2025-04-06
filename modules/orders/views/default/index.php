@@ -1,4 +1,6 @@
 <?php
+
+use app\modules\orders\models\Orders;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 
@@ -132,54 +134,23 @@ use yii\bootstrap5\NavBar;
         </tr>
         </thead>
         <tbody>
+        <?php foreach ($data as $row) { ?>
         <tr>
-            <td>558931</td>
-            <td>waliullah</td>
-            <td class="link">/p/BMRSv4FDevy/</td>
-            <td>3000</td>
+            <td><?php echo $row['ID']?></td>
+            <td><?php echo $row['User']?></td>
+            <td class="link"><?php echo $row['Link']?></td>
+            <td><?php echo $row['Quantity']?></td>
             <td class="service">
-                <span class="label-id">213</span>Likes
+                <span class="label-id">000</span><?php echo $row['Quantity']?>
             </td>
-            <td>Pending</td>
-            <td>Manual</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
-        <tr>
-            <td>55892</td>
-            <td>spiderfady</td>
-            <td class="link">/followers</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">3</span> Real Views
+            <td><?php echo Orders::STATUS_LIST[$row['Status']]?></td>
+            <td><?php echo Orders::MODE_LIST[$row['Mode']]?></td>
+            <td>
+                <span class="nowrap"><?php echo date('Y-m-d', $row['Created'])?></span>
+                <span class="nowrap"><?php echo date('H:i:s', $row['Created'])?></span>
             </td>
-            <td>Canceled</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
         </tr>
-        <tr>
-            <td>55891</td>
-            <td>spiderfady</td>
-            <td class="link">/com.usk</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">15</span> Views
-            </td>
-            <td>Canceled</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
-        <tr>
-            <td>52137</td>
-            <td>gulaka</td>
-            <td class="link">/p/BMD5RzxgRke/</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">5</span> Comment
-            </td>
-            <td>Error</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
+        <?php } ?>
         </tbody>
     </table>
     <div class="row">
