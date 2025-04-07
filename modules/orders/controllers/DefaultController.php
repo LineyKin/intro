@@ -12,6 +12,7 @@ use Yii;
 
 class DefaultController extends Controller
 {
+    const SEARCH_TYPE_PARAM = 'search-type';
 
     public $layout = 'main';
     public function actionIndex(): string
@@ -21,8 +22,24 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        $q = Orders::getQuery(Yii::$app->request->get());
+        $params = Yii::$app->request->queryParams;
+
+        //DebugHelper::pr($params,1);
+
+        $model = new Orders();
+
+        if (isset($params[self::SEARCH_TYPE_PARAM])) {
+            $model->scenario = $params[self::SEARCH_TYPE_PARAM];
+            $model->search = $params['search'];
+        }
+
+        if(!$model->validate()) {
+            DebugHelper::pr($model->errors,1);
+        }
+
+        $q = $model->getQuery($params);
         $data = $q->asArray()->all();
+
 
         return $this->render('index', [
             'data' => $data,

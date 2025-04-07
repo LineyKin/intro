@@ -80,9 +80,9 @@ use yii\bootstrap5\NavBar;
                     <span class="input-group-btn search-select-wrap">
 
             <select class="form-control search-select" name="search-type">
-              <option value="1" selected="">Order ID</option>
-              <option value="2">Link</option>
-              <option value="3">Username</option>
+              <option value="1" selected=""><?php echo Yii::t($category, 'Order ID')?></option>
+              <option value="2"><?php echo Yii::t($category, 'Link')?></option>
+              <option value="3"><?php echo Yii::t($category, 'Username')?></option>
             </select>
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
             </span>

@@ -14,4 +14,6 @@ return [
     'Status' => 'Status',
     'Mode' => 'Mode',
     'Created' => 'Created',
+    'Order ID' => 'Order ID',
+    'Username' => 'Username'
 ];

@@ -16,6 +16,8 @@ class Orders extends ActiveRecord
     public $Mode;
     public $Created;
 
+    public $search;
+
     const STATUS_LIST = [
         "pending",
         "inprogress",
@@ -29,6 +31,35 @@ class Orders extends ActiveRecord
         "Auto",
     ];
 
+    const SCENARIO_SEARCH_ID = 1;
+    const SCENARIO_SEARCH_LINK = 2;
+    const SCENARIO_SEARCH_USER = 3;
+
+    function scenarios()
+    {
+        return [
+            self::SCENARIO_DEFAULT => ['Mode', 'service_id'],
+            self::SCENARIO_SEARCH_ID => ['search'],
+            self::SCENARIO_SEARCH_LINK => ['search'],
+            self::SCENARIO_SEARCH_USER => ['search'],
+        ];
+    }
+
+    public function rules() {
+        return [
+            [['Mode', 'service_id'], 'integer'],
+
+            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_ID],
+            [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
+
+            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_LINK],
+            [['search'], 'string', 'on' => self::SCENARIO_SEARCH_LINK],
+
+            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_USER],
+            [['search'], 'string', 'on' => self::SCENARIO_SEARCH_USER],
+        ];
+    }
+
     public static function tableName(): string {
         return 'orders';
     }
@@ -38,7 +69,7 @@ class Orders extends ActiveRecord
         return array_flip(self::STATUS_LIST)[$status];
     }
 
-    public static function getQuery($params)
+    public function getQuery($params)
     {
         $query = self::find();
         $query->select([
@@ -58,6 +89,18 @@ class Orders extends ActiveRecord
 
         if (isset($params['status'])) {
             $query->andFilterWhere(['o.status' => Orders::getStatusCode($params['status'])]);
+        }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_ID) {
+            $query->andFilterWhere(["o.id" => $this->search]);
+        }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_LINK) {
+            $query->andFilterWhere(["link" => $this->search]);
+        }
+
+        if ($this->scenario == self::SCENARIO_SEARCH_USER) {
+            $query->andFilterWhere(["user_id" => Users::getIdByName($this->search)]);
         }
 
 
