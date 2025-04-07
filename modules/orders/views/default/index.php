@@ -106,16 +106,30 @@ use yii\helpers\Url;
                         <?php echo Yii::t($category, 'Service')?>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li class="active"><a href="">All (894931)</a></li>
-                        <li><a href=""><span class="label-id">214</span>  Real Views</a></li>
-                        <li><a href=""><span class="label-id">215</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">10</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">217</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">221</span> Followers</a></li>
-                        <li><a href=""><span class="label-id">224</span> Groups Join</a></li>
-                        <li><a href=""><span class="label-id">230</span> Website Likes</a></li>
-                    </ul>
+                    <?php
+                    $items = [
+                        [
+                            'label' => sprintf("All (%s)", $serviceTotalCount),
+                            'url' => Url::current(['mode' => null]),
+                        ],
+                    ];
+
+                    foreach ($serviceGroupData as $serviceId => $row) {
+                        $item = [
+                                'label' => sprintf('<span class="label-id">%s</span>  %s', $row['count'], $row['name']),
+                            'url' => Url::current(['service_id' => $serviceId]),
+                        ];
+
+                        array_push($items, $item);
+                    }
+
+                    echo Dropdown::widget([
+                        'items' => $items,
+                        'options' => ['class' => 'dropdown-menu'],
+                        'encodeLabels' => false,
+                    ]);
+                    ?>
+
                 </div>
             </th>
             <th><?php echo Yii::t($category, 'Status')?></th>
@@ -125,27 +139,19 @@ use yii\helpers\Url;
                         <?php echo Yii::t($category, 'Mode')?>
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li class="active"><a href="">All</a></li>
-                        <li><a href="">Manual</a></li>
-                        <li><a href="">Auto</a></li>
-                    </ul>
                     <?php
                     $items = [
                         [
                             'label' => 'All',
                             'url' => Url::current(['mode' => null]),
-                            'active' => !Yii::$app->request->get('mode'),
                         ],
                         [
                             'label' => 'Manual',
                             'url' => Url::current(['mode' => 0]),
-                            'active' => Yii::$app->request->get('mode') === 'manual',
                         ],
                         [
                             'label' => 'Auto',
                             'url' => Url::current(['mode' => 1]),
-                            'active' => Yii::$app->request->get('mode') === 'auto',
                         ],
                     ];
 
@@ -167,7 +173,9 @@ use yii\helpers\Url;
             <td class="link"><?php echo $row['Link']?></td>
             <td><?php echo $row['Quantity']?></td>
             <td class="service">
-                <span class="label-id">000</span><?php echo $row['Quantity']?>
+                <span class="label-id">
+                    <?php echo $serviceGroupData[$row['service_id']]['count'] ?>
+                </span><?php echo $row['Service']?>
             </td>
             <td><?php echo Orders::STATUS_LIST[$row['Status']]?></td>
             <td><?php echo Orders::MODE_LIST[$row['Mode']]?></td>

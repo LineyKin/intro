@@ -2,21 +2,26 @@
 
 namespace app\modules\orders\models;
 
+use app\helpers\DebugHelper;
 use Yii;
 use yii\db\ActiveRecord;
 class Orders extends ActiveRecord
 {
-    public $ID;
-    public $User;
-    public $Link;
-    public $Quantity;
-    public $Service;
+    //public $ID;
+    //public $User;
+    //public $Link;
+    //public $Quantity;
+    //public $Service;
     public $service_id;
-    public $Status;
-    public $Mode;
-    public $Created;
+    //public $Status;
+    //public $Mode;
+    //public $Created;
 
     public $search;
+    public $mode;
+    public $status;
+
+    private $serviceTotalCount;
 
     const STATUS_LIST = [
         "pending",
@@ -38,7 +43,7 @@ class Orders extends ActiveRecord
     function scenarios()
     {
         return [
-            self::SCENARIO_DEFAULT => ['Mode', 'service_id'],
+            self::SCENARIO_DEFAULT => ['mode', 'status', 'service_id'],
             self::SCENARIO_SEARCH_ID => ['search'],
             self::SCENARIO_SEARCH_LINK => ['search'],
             self::SCENARIO_SEARCH_USER => ['search'],
@@ -47,7 +52,13 @@ class Orders extends ActiveRecord
 
     public function rules() {
         return [
-            [['Mode', 'service_id'], 'integer'],
+            [
+                [
+                    'mode',
+                    //'service_id'
+                ],
+                'integer'
+            ],
 
             [['search'], 'required', 'on' => self::SCENARIO_SEARCH_ID],
             [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
@@ -69,7 +80,7 @@ class Orders extends ActiveRecord
         return array_flip(self::STATUS_LIST)[$status];
     }
 
-    public function getQuery($params)
+    public function getQuery()
     {
         $query = self::find();
         $query->select([
@@ -87,20 +98,19 @@ class Orders extends ActiveRecord
         $query->innerJoin("users u", "u.id = o.user_id");
         $query->innerJoin("services s", "s.id = o.service_id");
 
-        if (isset($params['status'])) {
-            $query->andFilterWhere(['o.status' => Orders::getStatusCode($params['status'])]);
+        if (!is_null($this->status)) {
+            $query->andFilterWhere(['o.status' => Orders::getStatusCode($this->status)]);
         }
 
-        if (isset($params['mode'])) {
-            $query->andFilterWhere(['o.mode' => $params['mode']]);
-        }
+        $query->andFilterWhere(['o.mode' => $this->mode]);
+        $query->andFilterWhere(['o.service_id' => $this->service_id]);
 
         if ($this->scenario == self::SCENARIO_SEARCH_ID) {
             $query->andFilterWhere(["o.id" => $this->search]);
         }
 
         if ($this->scenario == self::SCENARIO_SEARCH_LINK) {
-            $query->andFilterWhere(["link" => $this->search]);
+            $query->andFilterWhere(["link" => trim($this->search)]);
         }
 
         if ($this->scenario == self::SCENARIO_SEARCH_USER) {
@@ -112,5 +122,39 @@ class Orders extends ActiveRecord
         $query->limit(10);
 
         return $query;
+    }
+
+    public function getServiceGroupData()
+    {
+        $query = self::find();
+        $query->select([
+            "o.service_id",
+            "s.name",
+            "COUNT(*) AS count",
+        ]);
+        $query->from("orders o");
+        $query->innerJoin("services s", "s.id = o.service_id");
+        $query->andFilterWhere(['mode' => $this->mode]);
+        if (!is_null($this->status)) {
+            $query->andWhere(['status' => Orders::getStatusCode($this->status)]);
+        }
+        $query->groupBy("o.service_id");
+        $query->orderBy('count DESC');
+        $query->asArray();
+
+        $data = $query->all();
+        unset($query);
+
+        $final = [];
+        foreach ($data as $item) {
+            $this->serviceTotalCount += $item['count'];
+            $final[$item['service_id']] = ['count' => $item['count'], 'name' => $item['name']];
+        }
+
+        return $final;
+    }
+
+    public function getServiceTotalCount() {
+        return $this->serviceTotalCount;
     }
 }

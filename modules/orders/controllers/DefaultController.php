@@ -28,20 +28,23 @@ class DefaultController extends Controller
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
             $model->scenario = $params[self::SEARCH_TYPE_PARAM];
-            $model->search = $params['search'];
-            unset($params['mode']);
+            $model->mode = null;
+            $model->service_id = null;
         }
+
+        $model->setAttributes($params);
 
         if(!$model->validate()) {
             DebugHelper::pr($model->errors,1);
         }
 
-        $q = $model->getQuery($params);
-        $data = $q->asArray()->all();
-
+        $data = $model->getQuery()->asArray()->all();
+        $serviceGroupData = $model->getServiceGroupData();
 
         return $this->render('index', [
             'data' => $data,
+            'serviceGroupData' => $serviceGroupData,
+            'serviceTotalCount' => $model->getServiceTotalCount(),
         ]);
     }
 
