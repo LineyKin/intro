@@ -24,13 +24,12 @@ class DefaultController extends Controller
 
         $params = Yii::$app->request->queryParams;
 
-        //DebugHelper::pr($params,1);
-
         $model = new Orders();
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
             $model->scenario = $params[self::SEARCH_TYPE_PARAM];
             $model->search = $params['search'];
+            unset($params['mode']);
         }
 
         if(!$model->validate()) {

@@ -1,8 +1,10 @@
 <?php
 
 use app\modules\orders\models\Orders;
+use yii\bootstrap5\Dropdown;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Url;
 
 ?>
 <!DOCTYPE html>
@@ -128,6 +130,30 @@ use yii\bootstrap5\NavBar;
                         <li><a href="">Manual</a></li>
                         <li><a href="">Auto</a></li>
                     </ul>
+                    <?php
+                    $items = [
+                        [
+                            'label' => 'All',
+                            'url' => Url::current(['mode' => null]),
+                            'active' => !Yii::$app->request->get('mode'),
+                        ],
+                        [
+                            'label' => 'Manual',
+                            'url' => Url::current(['mode' => 0]),
+                            'active' => Yii::$app->request->get('mode') === 'manual',
+                        ],
+                        [
+                            'label' => 'Auto',
+                            'url' => Url::current(['mode' => 1]),
+                            'active' => Yii::$app->request->get('mode') === 'auto',
+                        ],
+                    ];
+
+                    echo Dropdown::widget([
+                        'items' => $items,
+                        'options' => ['class' => 'dropdown-menu'],
+                    ]);
+                    ?>
                 </div>
             </th>
             <th><?php echo Yii::t($category, 'Created')?></th>

@@ -91,6 +91,10 @@ class Orders extends ActiveRecord
             $query->andFilterWhere(['o.status' => Orders::getStatusCode($params['status'])]);
         }
 
+        if (isset($params['mode'])) {
+            $query->andFilterWhere(['o.mode' => $params['mode']]);
+        }
+
         if ($this->scenario == self::SCENARIO_SEARCH_ID) {
             $query->andFilterWhere(["o.id" => $this->search]);
         }
