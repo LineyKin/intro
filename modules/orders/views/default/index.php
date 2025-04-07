@@ -5,6 +5,7 @@ use yii\bootstrap5\Dropdown;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
 use yii\helpers\Url;
+use yii\widgets\LinkPager;
 
 ?>
 <!DOCTYPE html>
@@ -190,26 +191,18 @@ use yii\helpers\Url;
     <div class="row">
         <div class="col-sm-8">
 
-            <nav>
-                <ul class="pagination">
-                    <li class="disabled"><a href="" aria-label="Previous">&laquo;</a></li>
-                    <li class="active"><a href="">1</a></li>
-                    <li><a href="">2</a></li>
-                    <li><a href="">3</a></li>
-                    <li><a href="">4</a></li>
-                    <li><a href="">5</a></li>
-                    <li><a href="">6</a></li>
-                    <li><a href="">7</a></li>
-                    <li><a href="">8</a></li>
-                    <li><a href="">9</a></li>
-                    <li><a href="">10</a></li>
-                    <li><a href="" aria-label="Next">&raquo;</a></li>
-                </ul>
-            </nav>
+            <?php
+            echo LinkPager::widget([
+                'pagination' => $pages,
+                'hideOnSinglePage' => true
+            ]);
+            ?>
+
+
 
         </div>
         <div class="col-sm-4 pagination-counters">
-            1 to 100 of 3263
+            <?php echo sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page+1) * $pages->pageSize, $pages->totalCount); ?>
         </div>
 
     </div>

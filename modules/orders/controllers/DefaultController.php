@@ -13,6 +13,7 @@ use Yii;
 class DefaultController extends Controller
 {
     const SEARCH_TYPE_PARAM = 'search-type';
+    const ROWS_PER_PAGE = 10;
 
     public $layout = 'main';
     public function actionIndex(): string
@@ -38,13 +39,19 @@ class DefaultController extends Controller
             DebugHelper::pr($model->errors,1);
         }
 
-        $data = $model->getQuery()->asArray()->all();
+        $query = $model->getQuery();
         $serviceGroupData = $model->getServiceGroupData();
 
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $pages->pageSize = self::ROWS_PER_PAGE;
+        $query->offset($pages->offset)->limit($pages->limit);
+
         return $this->render('index', [
-            'data' => $data,
+            'data' => $query->asArray()->all(),
             'serviceGroupData' => $serviceGroupData,
             'serviceTotalCount' => $model->getServiceTotalCount(),
+            'pages' => $pages,
         ]);
     }
 

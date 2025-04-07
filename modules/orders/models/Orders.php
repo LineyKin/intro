@@ -52,13 +52,8 @@ class Orders extends ActiveRecord
 
     public function rules() {
         return [
-            [
-                [
-                    'mode',
-                    //'service_id'
-                ],
-                'integer'
-            ],
+            [['mode', 'service_id'], 'integer', 'on' => self::SCENARIO_DEFAULT],
+            [['status'], 'string', 'on' => self::SCENARIO_DEFAULT],
 
             [['search'], 'required', 'on' => self::SCENARIO_SEARCH_ID],
             [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
@@ -116,10 +111,6 @@ class Orders extends ActiveRecord
         if ($this->scenario == self::SCENARIO_SEARCH_USER) {
             $query->andFilterWhere(["user_id" => Users::getIdByName($this->search)]);
         }
-
-
-        // заглушка на время разработки
-        $query->limit(10);
 
         return $query;
     }
