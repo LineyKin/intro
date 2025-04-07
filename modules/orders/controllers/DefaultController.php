@@ -12,8 +12,10 @@ use Yii;
 
 class DefaultController extends Controller
 {
+    const SEARCH_TYPE_PARAM = 'search-type';
+    const ROWS_PER_PAGE = 10;
 
-    public $layout = 'ordersLayout';
+    public $layout = 'main';
     public function actionIndex(): string
     {
         Yii::$app->language = 'en'; // Вместо en-US
@@ -21,18 +23,35 @@ class DefaultController extends Controller
             Yii::$app->language = Yii::$app->session->get('language');
         }
 
-        $searchModel = new OrdersSearch();
-        $searchModel->setStatus(!empty($_GET['status']) ? $_GET['status'] : null);
+        $params = Yii::$app->request->queryParams;
 
-        if (isset($_GET['searchType'])) {
-            $searchModel->scenario = $_GET['searchType'];
+        $model = new Orders();
+
+        if (isset($params[self::SEARCH_TYPE_PARAM])) {
+            $model->scenario = $params[self::SEARCH_TYPE_PARAM];
+            $model->mode = null;
+            $model->service_id = null;
         }
 
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $model->setAttributes($params);
+
+        if(!$model->validate()) {
+            DebugHelper::pr($model->errors,1);
+        }
+
+        $query = $model->getQuery();
+        $serviceGroupData = $model->getServiceGroupData();
+
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $pages->pageSize = self::ROWS_PER_PAGE;
+        $query->offset($pages->offset)->limit($pages->limit);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'data' => $query->asArray()->all(),
+            'serviceGroupData' => $serviceGroupData,
+            'serviceTotalCount' => $model->getServiceTotalCount(),
+            'pages' => $pages,
         ]);
     }
 

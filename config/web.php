@@ -47,7 +47,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'orders/<status:[A-Za-z]+>' => 'orders/default/',
+                'orders/<status:\w+>' => 'orders/default/',
                 'orders/change-language' => 'orders/default/change-language',
             ],
         ],
@@ -68,10 +68,6 @@ $config = [
                     ],
                 ],
             ],
-        ],
-
-        'formatter' => [
-            'datetimeFormat' => 'php:Y-m-d H:i:s',
         ],
     ],
     'params' => $params,

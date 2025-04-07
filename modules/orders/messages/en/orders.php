@@ -7,4 +7,13 @@ return [
     'Completed' => 'Completed',
     'Cancelled' => 'Cancelled',
     'Fail' => 'Fail',
+    'User' => 'User',
+    'Link' => 'Link',
+    'Quantity' => 'Quantity',
+    'Service' => 'Service',
+    'Status' => 'Status',
+    'Mode' => 'Mode',
+    'Created' => 'Created',
+    'Order ID' => 'Order ID',
+    'Username' => 'Username'
 ];
