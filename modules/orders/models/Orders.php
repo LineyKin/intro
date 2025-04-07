@@ -3,20 +3,11 @@
 namespace app\modules\orders\models;
 
 use app\helpers\DebugHelper;
-use Yii;
 use yii\db\ActiveRecord;
+
 class Orders extends ActiveRecord
 {
-    //public $ID;
-    //public $User;
-    //public $Link;
-    //public $Quantity;
-    //public $Service;
     public $service_id;
-    //public $Status;
-    //public $Mode;
-    //public $Created;
-
     public $search;
     public $mode;
     public $status;
@@ -35,6 +26,8 @@ class Orders extends ActiveRecord
         "Manual",
         "Auto",
     ];
+
+    const FILENAME = 'orders.csv';
 
     const SCENARIO_SEARCH_ID = 1;
     const SCENARIO_SEARCH_LINK = 2;
@@ -96,6 +89,10 @@ class Orders extends ActiveRecord
         if (!is_null($this->status)) {
             $query->andFilterWhere(['o.status' => Orders::getStatusCode($this->status)]);
         }
+
+        //DebugHelper::vd("status " . $this->status);
+        //DebugHelper::vd("service_id " . $this->service_id);
+        //DebugHelper::vd("mode " . $this->mode,1);
 
         $query->andFilterWhere(['o.mode' => $this->mode]);
         $query->andFilterWhere(['o.service_id' => $this->service_id]);

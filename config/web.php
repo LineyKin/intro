@@ -47,7 +47,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'orders/<status:\w+>' => 'orders/default/',
+                'orders/<status:\w+>' => 'orders/default/index',
                 'orders/change-language' => 'orders/default/change-language',
             ],
         ],

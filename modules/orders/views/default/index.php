@@ -4,7 +4,9 @@ use app\modules\orders\models\Orders;
 use yii\bootstrap5\Dropdown;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
 
 ?>
@@ -188,21 +190,31 @@ use yii\widgets\LinkPager;
         <?php } ?>
         </tbody>
     </table>
+
+    <?php
+    ActiveForm::begin(
+            [
+                'action' => Url::current(['download' => 1]),
+                'method' => 'get'
+            ]
+    );
+
+    echo Html::submitButton('Download', ['class' => 'btn btn-primary']);
+
+    ActiveForm::end();
+    ?>
+
     <div class="row">
         <div class="col-sm-8">
-
             <?php
             echo LinkPager::widget([
                 'pagination' => $pages,
                 'hideOnSinglePage' => true
             ]);
             ?>
-
-
-
         </div>
         <div class="col-sm-4 pagination-counters">
-            <?php echo sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page+1) * $pages->pageSize, $pages->totalCount); ?>
+            <?php echo sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount); ?>
         </div>
 
     </div>
