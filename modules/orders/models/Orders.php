@@ -12,8 +12,6 @@ class Orders extends ActiveRecord
     public $mode;
     public $status;
 
-    private $serviceTotalCount;
-
     const STATUS_LIST = [
         "pending",
         "inprogress",
@@ -41,7 +39,8 @@ class Orders extends ActiveRecord
         ];
     }
 
-    public function rules() {
+    public function rules()
+    {
         return [
             [['mode', 'service_id'], 'integer', 'on' => self::SCENARIO_DEFAULT],
 
@@ -53,7 +52,8 @@ class Orders extends ActiveRecord
         ];
     }
 
-    public static function tableName(): string {
+    public static function tableName(): string
+    {
         return 'orders';
     }
 
@@ -102,39 +102,5 @@ class Orders extends ActiveRecord
         $query->orderBy("o.id");
 
         return $query;
-    }
-
-    public function getServiceGroupData()
-    {
-        $query = self::find();
-        $query->select([
-            "o.service_id",
-            "s.name",
-            "COUNT(*) AS count",
-        ]);
-        $query->from("orders o");
-        $query->innerJoin("services s", "s.id = o.service_id");
-        $query->andFilterWhere(['mode' => $this->mode]);
-        if (!is_null($this->status)) {
-            $query->andFilterWhere(['status' => Orders::getStatusCode($this->status)]);
-        }
-        $query->groupBy("o.service_id");
-        $query->orderBy('count DESC');
-        $query->asArray();
-
-        $data = $query->all();
-        unset($query);
-
-        $final = [];
-        foreach ($data as $item) {
-            $this->serviceTotalCount += $item['count'];
-            $final[$item['service_id']] = ['count' => $item['count'], 'name' => $item['name']];
-        }
-
-        return $final;
-    }
-
-    public function getServiceTotalCount() {
-        return $this->serviceTotalCount;
     }
 }

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @var $serviceGroupData
+ * @var $serviceTotalCount
+ * @var $data
+ * @var $pages
+ */
+
 use app\modules\orders\models\Orders;
 use yii\bootstrap5\Dropdown;
 use yii\bootstrap5\Nav;
