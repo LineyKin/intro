@@ -3,6 +3,7 @@
 namespace app\modules\orders\models;
 
 use app\helpers\DebugHelper;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 class Orders extends ActiveRecord
@@ -29,7 +30,7 @@ class Orders extends ActiveRecord
     const SCENARIO_SEARCH_LINK = 2;
     const SCENARIO_SEARCH_USER = 3;
 
-    function scenarios()
+    function scenarios() : array
     {
         return [
             self::SCENARIO_DEFAULT => ['status', 'service_id', 'mode'],
@@ -39,7 +40,7 @@ class Orders extends ActiveRecord
         ];
     }
 
-    public function rules()
+    public function rules() : array
     {
         return [
             [['mode', 'service_id'], 'integer', 'on' => self::SCENARIO_DEFAULT],
@@ -62,7 +63,7 @@ class Orders extends ActiveRecord
         return array_flip(self::STATUS_LIST)[$status];
     }
 
-    public function getQuery()
+    public function getQuery() : ActiveQuery
     {
         $query = self::find();
         $query->select([

@@ -9,7 +9,7 @@ class Service extends Model
     public $mode;
     public $status;
 
-    public  function rules()
+    public  function rules() : array
     {
         return [
             [['mode'], 'integer'],
@@ -17,7 +17,7 @@ class Service extends Model
         ];
 
     }
-    public function getGroupData()
+    public function getGroupData() : array
     {
         $query = Orders::find();
         $query->select([
@@ -46,7 +46,7 @@ class Service extends Model
         return $final;
     }
 
-    public function getTotalCount()
+    public function getTotalCount() :int
     {
         $query = Orders::find();
         $query->select([

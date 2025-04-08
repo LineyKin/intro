@@ -8,6 +8,7 @@ use app\modules\orders\models\Service;
 use yii\data\Pagination;
 use yii\web\Controller;
 use Yii;
+use yii\web\Response;
 
 class DefaultController extends Controller
 {
@@ -92,7 +93,7 @@ class DefaultController extends Controller
         exit();
     }
 
-    public function actionChangeLanguage($lang)
+    public function actionChangeLanguage($lang) :Response
     {
         Yii::$app->session->set('language', $lang);
 

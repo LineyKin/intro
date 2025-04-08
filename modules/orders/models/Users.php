@@ -4,7 +4,8 @@ namespace app\modules\orders\models;
 
 class Users extends \yii\db\ActiveRecord
 {
-    public static function tableName(): string {
+    public static function tableName(): string
+    {
         return 'users';
     }
 
