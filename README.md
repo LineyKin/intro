@@ -15,15 +15,12 @@ cd intro/
 composer install
 ```
 
-Дадим разрешение записывать в папку runtime кеш, логи и т.д.
-```rb
-chmod 777 runtime
-```
-
 Создаём env-файл.
 ```rb
 touch .env
 ```
+
+В корень проект помещаем файл test_db_data.sql и test_db_structure.sql
 
 Запускаем приложение
 ```rb
