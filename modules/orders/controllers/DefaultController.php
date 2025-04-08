@@ -12,6 +12,7 @@ class DefaultController extends Controller
 {
     const SEARCH_TYPE_PARAM = 'search-type';
     const ROWS_PER_PAGE = 10;
+    const FILENAME = 'orders.csv';
 
     public $layout = 'main';
 
@@ -32,7 +33,6 @@ class DefaultController extends Controller
             $model->scenario = $params[self::SEARCH_TYPE_PARAM];
         }
 
-
         $model->setAttributes($params);
 
         /**
@@ -43,7 +43,6 @@ class DefaultController extends Controller
         }
 
         $query = $model->getQuery();
-        $serviceGroupData = $model->getServiceGroupData();
 
         /**
          * скачиваем csv-файл
@@ -55,30 +54,28 @@ class DefaultController extends Controller
         /**
          * пагинатор
          */
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $pages = new Pagination(['totalCount' => $query->count()]);
         $pages->pageSize = self::ROWS_PER_PAGE;
         $query->offset($pages->offset)->limit($pages->limit);
 
         return $this->render('index', [
-            'data' => $query->asArray()->all(),
-            'serviceGroupData' => $serviceGroupData,
-            'serviceTotalCount' => $model->getServiceTotalCount(),
-            'pages' => $pages,
+            'data' => $query->asArray()->all(), // табличные данные
+            'serviceGroupData' => $model->getServiceGroupData(), // данные для выпадающего списка в столбце "Сервис"
+            'serviceTotalCount' => $model->getServiceTotalCount(), // для All(...) в выпадающем списке сервисов
+            'pages' => $pages // для пагинатора
         ]);
     }
 
     private function downloadFile($model)
     {
-        // заглушка лимит=10 на время разработки
-        $data = $model->getQuery()->limit(10)->asArray()->all();
-        $fileName = $model::FILENAME;
+        $data = $model->getQuery()->asArray()->all();
         unset($model);
 
-        $fp = fopen($fileName, 'w');
+        $fp = fopen(self::FILENAME, 'w');
 
-        foreach ($data as $fields) {
-            fputcsv($fp, $fields, ',', '"', '');
+        foreach ($data as $key => $row) {
+            fputcsv($fp, $row, ',', '"', '');
+            unset($data[$key]);
         }
 
         unset($data);
@@ -86,9 +83,9 @@ class DefaultController extends Controller
         fclose($fp);
 
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header('Content-Disposition: attachment; filename=' . $fileName);
+        header('Content-Disposition: attachment; filename=' . self::FILENAME);
 
-        readfile($fileName);
+        readfile(self::FILENAME);
         exit();
     }
 

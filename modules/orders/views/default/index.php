@@ -81,7 +81,7 @@ use yii\widgets\LinkPager;
     <li class="pull-right custom-search">
             <form class="form-inline" action=<?php $_SERVER['REQUEST_URI']?>>
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" value="" placeholder="Search orders">
+                    <input type="text" name="search" class="form-control" value="" placeholder="Search orders" required>
                     <span class="input-group-btn search-select-wrap">
 
             <select class="form-control search-select" name="search-type">
@@ -113,7 +113,7 @@ use yii\widgets\LinkPager;
                     $items = [
                         [
                             'label' => sprintf("All (%s)", $serviceTotalCount),
-                            'url' => Url::current(['mode' => null]),
+                            'url' => Url::current(['service_id' => null]),
                         ],
                     ];
 
@@ -199,7 +199,7 @@ use yii\widgets\LinkPager;
             ]
     );
 
-    echo Html::submitButton('Download', ['class' => 'btn btn-primary']);
+    echo Html::submitButton( Yii::t($category, 'Download CSV'), ['class' => 'btn btn-primary']);
 
     ActiveForm::end();
     ?>

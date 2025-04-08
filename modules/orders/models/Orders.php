@@ -27,8 +27,6 @@ class Orders extends ActiveRecord
         "Auto",
     ];
 
-    const FILENAME = 'orders.csv';
-
     const SCENARIO_SEARCH_ID = 1;
     const SCENARIO_SEARCH_LINK = 2;
     const SCENARIO_SEARCH_USER = 3;
@@ -36,26 +34,22 @@ class Orders extends ActiveRecord
     function scenarios()
     {
         return [
-            self::SCENARIO_DEFAULT => ['mode', 'status', 'service_id'],
-            self::SCENARIO_SEARCH_ID => ['search'],
-            self::SCENARIO_SEARCH_LINK => ['search'],
-            self::SCENARIO_SEARCH_USER => ['search'],
+            self::SCENARIO_DEFAULT => ['status', 'service_id', 'mode'],
+            self::SCENARIO_SEARCH_ID => ['status', 'search'],
+            self::SCENARIO_SEARCH_LINK => ['status', 'search'],
+            self::SCENARIO_SEARCH_USER => ['status', 'search'],
         ];
     }
 
     public function rules() {
         return [
             [['mode', 'service_id'], 'integer', 'on' => self::SCENARIO_DEFAULT],
-            [['status'], 'string', 'on' => self::SCENARIO_DEFAULT],
 
-            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_ID],
             [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
 
-            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_LINK],
             [['search'], 'string', 'on' => self::SCENARIO_SEARCH_LINK],
 
-            [['search'], 'required', 'on' => self::SCENARIO_SEARCH_USER],
-            [['search'], 'string', 'on' => self::SCENARIO_SEARCH_USER],
+            [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_USER],
         ];
     }
 
@@ -90,10 +84,6 @@ class Orders extends ActiveRecord
             $query->andFilterWhere(['o.status' => Orders::getStatusCode($this->status)]);
         }
 
-        //DebugHelper::vd("status " . $this->status);
-        //DebugHelper::vd("service_id " . $this->service_id);
-        //DebugHelper::vd("mode " . $this->mode,1);
-
         $query->andFilterWhere(['o.mode' => $this->mode]);
         $query->andFilterWhere(['o.service_id' => $this->service_id]);
 
@@ -108,6 +98,8 @@ class Orders extends ActiveRecord
         if ($this->scenario == self::SCENARIO_SEARCH_USER) {
             $query->andFilterWhere(["user_id" => Users::getIdByName($this->search)]);
         }
+
+        $query->orderBy("o.id");
 
         return $query;
     }
@@ -124,7 +116,7 @@ class Orders extends ActiveRecord
         $query->innerJoin("services s", "s.id = o.service_id");
         $query->andFilterWhere(['mode' => $this->mode]);
         if (!is_null($this->status)) {
-            $query->andWhere(['status' => Orders::getStatusCode($this->status)]);
+            $query->andFilterWhere(['status' => Orders::getStatusCode($this->status)]);
         }
         $query->groupBy("o.service_id");
         $query->orderBy('count DESC');

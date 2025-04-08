@@ -15,5 +15,6 @@ return [
     'Mode' => 'Mode',
     'Created' => 'Created',
     'Order ID' => 'Order ID',
-    'Username' => 'Username'
+    'Username' => 'Username',
+    'Download CSV' => 'Download CSV'
 ];

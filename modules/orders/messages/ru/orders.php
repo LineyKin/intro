@@ -15,5 +15,6 @@ return [
     'Mode' => 'Мод',
     'Created' => 'Дата создания',
     'Order ID' => 'ID заказа',
-    'Username' => 'Имя пользователя'
+    'Username' => 'Имя пользователя',
+    'Download CSV' => 'Скачать CSV'
 ];
