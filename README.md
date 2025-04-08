@@ -35,3 +35,8 @@ docker exec -ti intro_app bash
 ```rb
 ./yii migrate
 ```
+
+Проект доступен по адресу
+```rb
+http://localhost:8000/orders/
+```
