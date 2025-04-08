@@ -85,6 +85,7 @@ class DefaultController extends Controller
         header('Content-Disposition: attachment; filename=' . $model::FILENAME);
 
         readfile($model::FILENAME);
+        exit();
     }
 
     public function actionChangeLanguage($lang)
