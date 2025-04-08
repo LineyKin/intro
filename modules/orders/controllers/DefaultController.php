@@ -72,19 +72,23 @@ class DefaultController extends Controller
     {
         // заглушка лимит=10 на время разработки
         $data = $model->getQuery()->limit(10)->asArray()->all();
+        $fileName = $model::FILENAME;
+        unset($model);
 
-        $fp = fopen($model::FILENAME, 'w');
+        $fp = fopen($fileName, 'w');
 
         foreach ($data as $fields) {
             fputcsv($fp, $fields, ',', '"', '');
         }
 
+        unset($data);
+
         fclose($fp);
 
         header( 'Content-Type: text/csv; charset=utf-8' );
-        header('Content-Disposition: attachment; filename=' . $model::FILENAME);
+        header('Content-Disposition: attachment; filename=' . $fileName);
 
-        readfile($model::FILENAME);
+        readfile($fileName);
         exit();
     }
 
