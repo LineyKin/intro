@@ -4,6 +4,10 @@ namespace app\modules\orders\models;
 
 use yii\db\ActiveQuery;
 
+/**
+ * Возвращает запрос на выгрузку данных о заказах
+ * согласно всем фильтрам, роутам и поисковым параметрам
+ */
 class OrdersSearch extends Orders
 {
     public function getQuery() : ActiveQuery

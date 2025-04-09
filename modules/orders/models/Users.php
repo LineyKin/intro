@@ -9,6 +9,12 @@ class Users extends \yii\db\ActiveRecord
         return 'users';
     }
 
+    /**
+     * Возвращает id пользователя по его имени и фамилии
+     *
+     * @param string $name
+     * @return int|null
+     */
     public static function getIdByName(string $name): ?int
     {
         $nameArr = explode(" ", $name);

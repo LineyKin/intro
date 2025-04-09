@@ -16,5 +16,6 @@ return [
     'Created' => 'Created',
     'Order ID' => 'Order ID',
     'Username' => 'Username',
-    'Download CSV' => 'Download CSV'
+    'Download CSV' => 'Download CSV',
+    'Language' => 'Language',
 ];

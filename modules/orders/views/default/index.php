@@ -73,10 +73,10 @@ use yii\widgets\LinkPager;
             ['label' => Yii::t($category, 'Pending'), 'url' => ['/orders/pending']],
             ['label' => Yii::t($category, 'In progress'), 'url' => ['/orders/inprogress']],
             ['label' => Yii::t($category, 'Completed'), 'url' => ['/orders/completed']],
-            ['label' =>  Yii::t($category, 'Cancelled'), 'url' => ['/orders/cancelled']],
-            ['label' =>  Yii::t($category, 'Fail'), 'url' => ['/orders/fail']],
+            ['label' => Yii::t($category, 'Cancelled'), 'url' => ['/orders/cancelled']],
+            ['label' => Yii::t($category, 'Fail'), 'url' => ['/orders/fail']],
             [
-                'label' => Yii::t('app', 'Language'),
+                'label' => Yii::t($category, 'Language'),
                 'items' => [
                     ['label' => 'English', 'url' => ['/orders/change-language', 'lang' => 'en']],
                     ['label' => 'Русский', 'url' => ['/orders/change-language', 'lang' => 'ru']],

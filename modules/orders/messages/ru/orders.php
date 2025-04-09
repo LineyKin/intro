@@ -16,5 +16,6 @@ return [
     'Created' => 'Дата создания',
     'Order ID' => 'ID заказа',
     'Username' => 'Имя пользователя',
-    'Download CSV' => 'Скачать CSV'
+    'Download CSV' => 'Скачать CSV',
+    'Language' => 'Язык'
 ];

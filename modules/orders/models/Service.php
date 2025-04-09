@@ -17,6 +17,12 @@ class Service extends Model
         ];
 
     }
+
+    /**
+     * Возвращает сгруппированные данные по услугам и их количеству
+     *
+     * @return array
+     */
     public function getGroupData() : array
     {
         $query = Orders::find();
@@ -46,6 +52,11 @@ class Service extends Model
         return $final;
     }
 
+    /**
+     * Возвращает количество всех услуг
+     *
+     * @return int
+     */
     public function getTotalCount() :int
     {
         $query = Orders::find();
