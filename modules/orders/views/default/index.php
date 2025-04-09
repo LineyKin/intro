@@ -5,6 +5,7 @@
  * @var $serviceTotalCount
  * @var $data
  * @var $pages
+ * @var $validateErrors
  */
 
 use app\modules\orders\models\Orders;
@@ -41,6 +42,15 @@ use yii\widgets\LinkPager;
     <![endif]-->
 </head>
 <body>
+<?php
+    if(!empty($validateErrors)) {
+        $errorBanner =  Html::beginTag('div', ['class' => 'alert alert-danger']);
+        $errorBanner .= json_encode($validateErrors);
+        $errorBanner .= Html::endTag('div');
+
+        echo $errorBanner;
+    }
+?>
 <nav class="navbar navbar-fixed-top navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">

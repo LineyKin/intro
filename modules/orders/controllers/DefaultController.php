@@ -39,9 +39,7 @@ class DefaultController extends Controller
         $model->setAttributes($params);
         $serviceModel->setAttributes($params);
 
-        if(!$model->validate()) {
-            DebugHelper::pr($model->errors,1);
-        }
+        $model->validate();
 
         $query = $model->getQuery();
 
@@ -64,9 +62,16 @@ class DefaultController extends Controller
             'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
             'serviceTotalCount' => $serviceModel->getTotalCount(), // для All(...) в выпадающем списке сервисов
             'pages' => $pages, // для пагинатора
+            'validateErrors' => $model->errors,
         ]);
     }
 
+    /**
+     * Скачивает отображённые данные в csv-файл
+     *
+     * @param $model
+     * @return void
+     */
     private function downloadFile($model)
     {
         $data = $model->getQuery()->asArray()->all();
@@ -90,6 +95,12 @@ class DefaultController extends Controller
         exit();
     }
 
+    /**
+     * Смена языка
+     *
+     * @param $lang
+     * @return Response
+     */
     public function actionChangeLanguage($lang) :Response
     {
         Yii::$app->session->set('language', $lang);
