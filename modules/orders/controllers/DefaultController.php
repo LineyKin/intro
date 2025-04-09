@@ -3,7 +3,7 @@
 namespace app\modules\orders\controllers;
 
 use app\helpers\DebugHelper;
-use app\modules\orders\models\Orders;
+use app\modules\orders\models\OrdersSearch;
 use app\modules\orders\models\Service;
 use yii\data\Pagination;
 use yii\web\Controller;
@@ -29,7 +29,7 @@ class DefaultController extends Controller
         }
 
         $params = Yii::$app->request->queryParams;
-        $model = new Orders();
+        $model = new OrdersSearch();
         $serviceModel = new Service();
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
@@ -39,9 +39,6 @@ class DefaultController extends Controller
         $model->setAttributes($params);
         $serviceModel->setAttributes($params);
 
-        /**
-         * TODO проверить валидацию
-         */
         if(!$model->validate()) {
             DebugHelper::pr($model->errors,1);
         }
@@ -66,7 +63,7 @@ class DefaultController extends Controller
             'data' => $query->asArray()->all(), // табличные данные
             'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
             'serviceTotalCount' => $serviceModel->getTotalCount(), // для All(...) в выпадающем списке сервисов
-            'pages' => $pages // для пагинатора
+            'pages' => $pages, // для пагинатора
         ]);
     }
 
