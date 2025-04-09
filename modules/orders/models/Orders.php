@@ -13,12 +13,18 @@ class Orders extends ActiveRecord
     public $mode;
     public $status;
 
+
+    const STATUS_PENDING_CODE = 0;
+    const STATUS_IN_PROGRESS_CODE = 1;
+    const STATUS_COMPLETE_CODE = 2;
+    const STATUS_CANCEL_CODE = 3;
+    const STATUS_FAIL_CODE = 4;
     const STATUS_LIST = [
-        "pending",
-        "inprogress",
-        "completed",
-        "cancelled",
-        "fail",
+        self::STATUS_PENDING_CODE => "pending",
+        self::STATUS_IN_PROGRESS_CODE => "inprogress",
+        self::STATUS_COMPLETE_CODE => "completed",
+        self::STATUS_CANCEL_CODE => "cancelled",
+        self::STATUS_FAIL_CODE => "fail",
     ];
 
     const MODE_MANUAL_CODE = 0;
@@ -91,5 +97,10 @@ class Orders extends ActiveRecord
     public static function getStatusCode(string $status): int
     {
         return array_flip(self::STATUS_LIST)[$status];
+    }
+
+    public static function getStatusRouteByCode(int $code) : string
+    {
+        return sprintf('/orders/%s', self::getStatusByCode($code));
     }
 }

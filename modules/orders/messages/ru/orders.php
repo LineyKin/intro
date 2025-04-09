@@ -2,11 +2,11 @@
 
 return [
     'All orders' => 'Все заказы',
-    'Pending' => 'В ожидании',
-    'In progress' => 'Выполняется',
-    'Completed' => 'Завершён',
-    'Cancelled' => 'Отменён',
-    'Fail' => 'Провален',
+    'pending' => 'В ожидании',
+    'inprogress' => 'Выполняется',
+    'completed' => 'Завершён',
+    'cancelled' => 'Отменён',
+    'fail' => 'Провален',
     'User' => 'Пользователь',
     'Link' => 'Ссылка',
     'Quantity' => 'Количество',

@@ -6,6 +6,7 @@
  * @var $data
  * @var $pages
  * @var $validateErrors
+ * @var $moduleName
  */
 
 use app\modules\orders\models\Orders;
@@ -69,24 +70,38 @@ use yii\widgets\LinkPager;
     </div>
 </nav>
 <div class="container-fluid">
-
      <?php
-    $category = 'orders';
     NavBar::begin([
-        'brandLabel' => Yii::t($category, 'All orders'),
-        'brandUrl' => '/orders/',
+        'brandLabel' => Yii::t($moduleName, 'All orders'),
+        'brandUrl' => sprintf("/%s/", $moduleName),
         'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top']
     ]);
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => Yii::t($category, 'Pending'), 'url' => ['/orders/pending']],
-            ['label' => Yii::t($category, 'In progress'), 'url' => ['/orders/inprogress']],
-            ['label' => Yii::t($category, 'Completed'), 'url' => ['/orders/completed']],
-            ['label' => Yii::t($category, 'Cancelled'), 'url' => ['/orders/cancelled']],
-            ['label' => Yii::t($category, 'Fail'), 'url' => ['/orders/fail']],
             [
-                'label' => Yii::t($category, 'Language'),
+                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_PENDING_CODE)),
+                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_PENDING_CODE)]
+            ],
+            [
+                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_IN_PROGRESS_CODE)),
+                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_IN_PROGRESS_CODE)]
+            ],
+            [
+                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_COMPLETE_CODE)),
+                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_COMPLETE_CODE)]
+            ],
+            [
+                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_CANCEL_CODE)),
+                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_CANCEL_CODE)]
+            ],
+            [
+                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_FAIL_CODE)),
+                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_FAIL_CODE)]
+            ],
+            [
+                'label' => Yii::t($moduleName, 'Language'),
                 'items' => [
                     ['label' => 'English', 'url' => ['/orders/change-language', 'lang' => 'en']],
                     ['label' => 'Русский', 'url' => ['/orders/change-language', 'lang' => 'ru']],
@@ -96,16 +111,23 @@ use yii\widgets\LinkPager;
     ]); ?>
 
     <li class="pull-right custom-search">
-            <form class="form-inline" action=<?php $_SERVER['REQUEST_URI']?>>
+            <form class="form-inline" action=<?php echo $_SERVER['REQUEST_URI']?>>
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" value="" placeholder="Search orders" required>
                     <span class="input-group-btn search-select-wrap">
 
             <select class="form-control search-select" name="search-type">
-              <option value="1" selected=""><?php echo Yii::t($category, 'Order ID')?></option>
-              <option value="2"><?php echo Yii::t($category, 'Link')?></option>
-              <option value="3"><?php echo Yii::t($category, 'Username')?></option>
+              <option value=<?php echo Orders::SCENARIO_SEARCH_ID?> selected="">
+                  <?php echo Yii::t($moduleName, 'Order ID')?>
+              </option>
+              <option value=<?php echo Orders::SCENARIO_SEARCH_LINK?>>
+                  <?php echo Yii::t($moduleName, 'Link')?>
+              </option>
+              <option value=<?php echo Orders::SCENARIO_SEARCH_USER?>>
+                    <?php echo Yii::t($moduleName, 'Username')?>
+              </option>
             </select>
+
             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
             </span>
                 </div>
@@ -117,13 +139,13 @@ use yii\widgets\LinkPager;
         <thead>
         <tr>
             <th>ID</th>
-            <th><?php echo Yii::t($category, 'User')?></th>
-            <th><?php echo Yii::t($category, 'Link')?></th>
-            <th><?php echo Yii::t($category, 'Quantity')?></th>
+            <th><?php echo Yii::t($moduleName, 'User')?></th>
+            <th><?php echo Yii::t($moduleName, 'Link')?></th>
+            <th><?php echo Yii::t($moduleName, 'Quantity')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo Yii::t($category, 'Service')?>
+                        <?php echo Yii::t($moduleName, 'Service')?>
                         <span class="caret"></span>
                     </button>
                     <?php
@@ -152,11 +174,11 @@ use yii\widgets\LinkPager;
 
                 </div>
             </th>
-            <th><?php echo Yii::t($category, 'Status')?></th>
+            <th><?php echo Yii::t($moduleName, 'Status')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo Yii::t($category, 'Mode')?>
+                        <?php echo Yii::t($moduleName, 'Mode')?>
                         <span class="caret"></span>
                     </button>
                     <?php
@@ -183,7 +205,7 @@ use yii\widgets\LinkPager;
                     ?>
                 </div>
             </th>
-            <th><?php echo Yii::t($category, 'Created')?></th>
+            <th><?php echo Yii::t($moduleName, 'Created')?></th>
         </tr>
         </thead>
         <tbody>
@@ -217,7 +239,7 @@ use yii\widgets\LinkPager;
             ]
     );
 
-    echo Html::submitButton( Yii::t($category, 'Download CSV'), ['class' => 'btn btn-primary']);
+    echo Html::submitButton( Yii::t($moduleName, 'Download CSV'), ['class' => 'btn btn-primary']);
 
     ActiveForm::end();
     ?>

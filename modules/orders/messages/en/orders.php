@@ -2,11 +2,11 @@
 
 return [
     'All orders' => 'All orders',
-    'Pending' => 'Pending',
-    'In progress' => 'In progress',
-    'Completed' => 'Completed',
-    'Cancelled' => 'Cancelled',
-    'Fail' => 'Fail',
+    'pending' => 'Pending',
+    'inprogress' => 'In progress',
+    'completed' => 'Completed',
+    'cancelled' => 'Cancelled',
+    'fail' => 'Fail',
     'User' => 'User',
     'Link' => 'Link',
     'Quantity' => 'Quantity',

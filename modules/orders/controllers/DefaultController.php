@@ -63,6 +63,7 @@ class DefaultController extends Controller
             'serviceTotalCount' => $serviceModel->getTotalCount(), // для All(...) в выпадающем списке сервисов
             'pages' => $pages, // для пагинатора
             'validateErrors' => $model->errors,
+            'moduleName' => $this->module->id,
         ]);
     }
 
