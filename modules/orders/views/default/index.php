@@ -1,12 +1,32 @@
 <?php
 
 /**
+ * labels:
+ * @var $serviceTotalLabel
+ * @var $modeTotalLabel
+ * @var $brandLabel
+ *
+ * labels: список параметров поиска
+ * @var $searchOrderIdLabel
+ * @var $searchLinkLabel
+ * @var $searchUsernameLabel
+ *
+ * labels: шапка таблицы
+ * @var $thID
+ * @var $thUser
+ * @var $thLink
+ * @var $thQuantity
+ * @var $thService
+ * @var $thStatus
+ * @var $thMode
+ * @var $thCreated
+ *
  * @var $serviceGroupData
- * @var $serviceTotalCount
  * @var $data
  * @var $pages
  * @var $validateErrors
  * @var $moduleName
+ * @var $paginationCounters
  */
 
 use app\modules\orders\models\Orders;
@@ -72,7 +92,7 @@ use yii\widgets\LinkPager;
 <div class="container-fluid">
      <?php
     NavBar::begin([
-        'brandLabel' => Yii::t($moduleName, 'All orders'),
+        'brandLabel' => $brandLabel,
         'brandUrl' => sprintf("/%s/", $moduleName),
         'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top']
     ]);
@@ -118,13 +138,13 @@ use yii\widgets\LinkPager;
 
             <select class="form-control search-select" name="search-type">
               <option value=<?php echo Orders::SCENARIO_SEARCH_ID?> selected="">
-                  <?php echo Yii::t($moduleName, 'Order ID')?>
+                  <?php echo $searchOrderIdLabel?>
               </option>
               <option value=<?php echo Orders::SCENARIO_SEARCH_LINK?>>
-                  <?php echo Yii::t($moduleName, 'Link')?>
+                  <?php echo $searchLinkLabel?>
               </option>
               <option value=<?php echo Orders::SCENARIO_SEARCH_USER?>>
-                    <?php echo Yii::t($moduleName, 'Username')?>
+                    <?php echo $searchUsernameLabel?>
               </option>
             </select>
 
@@ -138,20 +158,20 @@ use yii\widgets\LinkPager;
     <table class="table order-table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th><?php echo Yii::t($moduleName, 'User')?></th>
-            <th><?php echo Yii::t($moduleName, 'Link')?></th>
-            <th><?php echo Yii::t($moduleName, 'Quantity')?></th>
+            <th><?php echo $thID?></th>
+            <th><?php echo $thUser?></th>
+            <th><?php echo $thLink?></th>
+            <th><?php echo $thQuantity?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo Yii::t($moduleName, 'Service')?>
+                        <?php echo $thService?>
                         <span class="caret"></span>
                     </button>
                     <?php
                     $items = [
                         [
-                            'label' => sprintf("All (%s)", $serviceTotalCount),
+                            'label' => $serviceTotalLabel,
                             'url' => Url::current(['service_id' => null]),
                         ],
                     ];
@@ -174,18 +194,18 @@ use yii\widgets\LinkPager;
 
                 </div>
             </th>
-            <th><?php echo Yii::t($moduleName, 'Status')?></th>
+            <th><?php echo $thStatus?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo Yii::t($moduleName, 'Mode')?>
+                        <?php echo $thMode?>
                         <span class="caret"></span>
                     </button>
                     <?php
 
                     $items = [
                         [
-                            'label' => 'All',
+                            'label' => $modeTotalLabel,
                             'url' => Url::current(['mode' => null]),
                         ],
                         [
@@ -205,7 +225,7 @@ use yii\widgets\LinkPager;
                     ?>
                 </div>
             </th>
-            <th><?php echo Yii::t($moduleName, 'Created')?></th>
+            <th><?php echo $thCreated?></th>
         </tr>
         </thead>
         <tbody>
@@ -254,7 +274,7 @@ use yii\widgets\LinkPager;
             ?>
         </div>
         <div class="col-sm-4 pagination-counters">
-            <?php echo sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount); ?>
+            <?php echo $paginationCounters; ?>
         </div>
 
     </div>

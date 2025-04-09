@@ -56,14 +56,36 @@ class DefaultController extends Controller
         $pages = new Pagination(['totalCount' => $query->count()]);
         $pages->pageSize = self::ROWS_PER_PAGE;
         $query->offset($pages->offset)->limit($pages->limit);
+        $category = $this->module->id;
 
         return $this->render('index', [
             'data' => $query->asArray()->all(), // табличные данные
             'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
-            'serviceTotalCount' => $serviceModel->getTotalCount(), // для All(...) в выпадающем списке сервисов
             'pages' => $pages, // для пагинатора
             'validateErrors' => $model->errors,
             'moduleName' => $this->module->id,
+
+            // labels
+            'serviceTotalLabel' => sprintf("All (%s)", $serviceModel->getTotalCount()),
+            'modeTotalLabel' => 'All',
+            'brandLabel' => Yii::t($category, 'All orders'),
+
+            // labels: список параметров поиска
+            'searchOrderIdLabel' => Yii::t($category, 'Order ID'),
+            'searchLinkLabel' => Yii::t($category, 'Link'),
+            'searchUsernameLabel' => Yii::t($category, 'Username'),
+
+            // labels: шапка таблицы
+            'thID' => "ID",
+            'thUser' => Yii::t($category, 'User'),
+            'thLink' => Yii::t($category, 'Link'),
+            'thQuantity' => Yii::t($category, 'Quantity'),
+            'thService' => Yii::t($category, 'Service'),
+            'thStatus' => Yii::t($category, 'Status'),
+            'thMode' => Yii::t($category, 'Mode'),
+            'thCreated' => Yii::t($category, 'Created'),
+
+            'paginationCounters' => sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount)
         ]);
     }
 
