@@ -10,25 +10,25 @@ git clone git@github.com:LineyKin/intro.git
 cd intro/
 ```
 
-Собираем папку vendor на основе имеющегося файла composer.json
-```rb
-composer install
-```
+В корень проекта помещаем файл test_db_data.sql и test_db_structure.sql
 
-Создаём env-файл.
+Создаём env-файл. и копируем в него содержимое .env.example
 ```rb
 touch .env
 ```
-
-В корень проект помещаем файл test_db_data.sql и test_db_structure.sql
-
 Запускаем приложение
 ```rb
 docker compose up -d
 ```
+
 Заходим в контейнер приложения
 ```rb
 docker exec -ti intro_app bash
+```
+
+В контейнере запускаем composer
+```rb
+composer install
 ```
 
 В контейнере запускаем миграции
