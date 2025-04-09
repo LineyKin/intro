@@ -21,9 +21,11 @@ class Orders extends ActiveRecord
         "fail",
     ];
 
+    const MODE_MANUAL_CODE = 0;
+    const MODE_AUTO_CODE = 1;
     const MODE_LIST = [
-        "Manual",
-        "Auto",
+        self::MODE_MANUAL_CODE => "Manual",
+        self::MODE_AUTO_CODE => "Auto",
     ];
 
     const SCENARIO_SEARCH_ID = 1;
@@ -56,6 +58,16 @@ class Orders extends ActiveRecord
     public static function tableName(): string
     {
         return 'orders';
+    }
+
+    public static function getStatusByCode(int $code) : string
+    {
+        return self::STATUS_LIST[$code] ?? sprintf('Unknown status code: %d', $code);
+    }
+
+    public static function getModeByCode(int $code) : string
+    {
+        return self::MODE_LIST[$code] ?? sprintf('Unknown mode code: %d', $code);
     }
 
     public static function getStatusCode(string $status): int

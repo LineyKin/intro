@@ -150,18 +150,19 @@ use yii\widgets\LinkPager;
                         <span class="caret"></span>
                     </button>
                     <?php
+
                     $items = [
                         [
                             'label' => 'All',
                             'url' => Url::current(['mode' => null]),
                         ],
                         [
-                            'label' => 'Manual',
-                            'url' => Url::current(['mode' => 0]),
+                            'label' => Orders::getModeByCode(Orders::MODE_MANUAL_CODE),
+                            'url' => Url::current(['mode' => Orders::MODE_MANUAL_CODE]),
                         ],
                         [
-                            'label' => 'Auto',
-                            'url' => Url::current(['mode' => 1]),
+                            'label' => Orders::getModeByCode(Orders::MODE_AUTO_CODE),
+                            'url' => Url::current(['mode' => Orders::MODE_AUTO_CODE]),
                         ],
                     ];
 
@@ -187,8 +188,8 @@ use yii\widgets\LinkPager;
                     <?php echo $serviceGroupData[$row['service_id']]['count'] ?>
                 </span><?php echo $row['Service']?>
             </td>
-            <td><?php echo Orders::STATUS_LIST[$row['Status']]?></td>
-            <td><?php echo Orders::MODE_LIST[$row['Mode']]?></td>
+            <td><?php echo Orders::getStatusByCode($row['Status'])?></td>
+            <td><?php echo Orders::getModeByCode($row['Mode'])?></td>
             <td>
                 <span class="nowrap"><?php echo date('Y-m-d', $row['Created'])?></span>
                 <span class="nowrap"><?php echo date('H:i:s', $row['Created'])?></span>
