@@ -15,7 +15,6 @@ class Service extends Model
             [['mode'], 'integer'],
             [['status'], 'string'],
         ];
-
     }
 
     /**
@@ -57,7 +56,7 @@ class Service extends Model
      *
      * @return int
      */
-    public function getTotalCount() :int
+    private function getTotalCount() :int
     {
         $query = Orders::find();
         $query->select([
@@ -75,6 +74,16 @@ class Service extends Model
         unset($query);
 
         return $data[0]['count'];
+    }
+
+    /**
+     * Возвращает название первого элемента из списка фильтров по сервису
+     *
+     * @return string
+     */
+    public function getTotalLabel() :string
+    {
+        return sprintf("All (%s)", $this->getTotalCount());
     }
 
 }

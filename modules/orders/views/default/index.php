@@ -8,9 +8,10 @@
  * @var $validateErrors
  * @var $moduleName
  * @var $paginationCounters
- * @var $notDisabledMode
+ * @var $disabledMode
  */
 
+use app\modules\orders\models\Mode;
 use app\modules\orders\models\Orders;
 use yii\bootstrap5\Dropdown;
 use yii\bootstrap5\Nav;
@@ -190,12 +191,14 @@ use yii\widgets\LinkPager;
                             'url' => Url::current(['mode' => null]),
                         ],
                         [
-                            'label' => Yii::t($moduleName, Orders::getModeByCode(Orders::MODE_MANUAL_CODE)),
-                            'url' => Url::current(['mode' => Orders::MODE_MANUAL_CODE]),
+                            'label' => Yii::t($moduleName, Mode::getByCode(Mode::MANUAL_CODE)),
+                            'url' => Url::current(['mode' => Mode::MANUAL_CODE]),
+                            'disabled' => $disabledMode[Mode::MANUAL_CODE],
                         ],
                         [
-                            'label' => Yii::t($moduleName, Orders::getModeByCode(Orders::MODE_AUTO_CODE)),
-                            'url' => Url::current(['mode' => Orders::MODE_AUTO_CODE]),
+                            'label' => Yii::t($moduleName, Mode::getByCode(Mode::AUTO_CODE)),
+                            'url' => Url::current(['mode' => Mode::AUTO_CODE]),
+                            'disabled' => $disabledMode[Mode::AUTO_CODE],
                         ],
                     ];
 
@@ -222,7 +225,7 @@ use yii\widgets\LinkPager;
                 </span><?php echo $row['service']?>
             </td>
             <td><?php echo Yii::t($moduleName, Orders::getStatusByCode($row['status']))?></td>
-            <td><?php echo Yii::t($moduleName, Orders::getModeByCode($row['mode']))?></td>
+            <td><?php echo Yii::t($moduleName, Mode::getByCode($row['mode']))?></td>
             <td>
                 <span class="nowrap"><?php echo date('Y-m-d', $row['created_at'])?></span>
                 <span class="nowrap"><?php echo date('H:i:s', $row['created_at'])?></span>

@@ -27,13 +27,6 @@ class Orders extends ActiveRecord
         self::STATUS_FAIL_CODE => "fail",
     ];
 
-    const MODE_MANUAL_CODE = 0;
-    const MODE_AUTO_CODE = 1;
-    const MODE_LIST = [
-        self::MODE_MANUAL_CODE => "Manual",
-        self::MODE_AUTO_CODE => "Auto",
-    ];
-
     const SCENARIO_SEARCH_ID = 1;
     const SCENARIO_SEARCH_LINK = 2;
     const SCENARIO_SEARCH_USER = 3;
@@ -77,16 +70,6 @@ class Orders extends ActiveRecord
         return self::STATUS_LIST[$code] ?? sprintf('Unknown status code: %d', $code);
     }
 
-    /**
-     * Возвращает режим по коду
-     *
-     * @param int $code
-     * @return string
-     */
-    public static function getModeByCode(int $code) : string
-    {
-        return self::MODE_LIST[$code] ?? sprintf('Unknown mode code: %d', $code);
-    }
 
     /**
      * Возвращает код статуса по его названию

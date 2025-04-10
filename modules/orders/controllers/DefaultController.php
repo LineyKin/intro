@@ -3,6 +3,7 @@
 namespace app\modules\orders\controllers;
 
 use app\helpers\DebugHelper;
+use app\modules\orders\models\Mode;
 use app\modules\orders\models\OrdersSearch;
 use app\modules\orders\models\Service;
 use yii\data\Pagination;
@@ -29,26 +30,30 @@ class DefaultController extends Controller
         }
 
         $params = Yii::$app->request->queryParams;
-        $model = new OrdersSearch();
+        $order = new OrdersSearch();
         $serviceModel = new Service();
+        $modeModel = new Mode();
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
-            $model->scenario = $params[self::SEARCH_TYPE_PARAM];
+            $order->scenario = $params[self::SEARCH_TYPE_PARAM];
         }
 
-        $model->setAttributes($params);
+        $order->setAttributes($params);
         $serviceModel->setAttributes($params);
+        $modeModel->setAttributes($params);
 
-        $model->validate();
-
-        $query = $model->getQuery();
+        $order->validate();
+        $modeModel->validate();
 
         /**
          * скачиваем csv-файл
          */
         if (isset($params['download'])) {
-            $this->downloadFile($model);
+            $this->downloadFile($order);
         }
+
+        $query = $order->getQuery();
+        $data =  $query->asArray()->all();
 
         /**
          * пагинатор
@@ -56,16 +61,16 @@ class DefaultController extends Controller
         $pages = new Pagination(['totalCount' => $query->count()]);
         $pages->pageSize = $params['per-page'] ?? self::PER_PAGE_DEFAULT;
         $query->offset($pages->offset)->limit($pages->limit);
-        $data =  $query->asArray()->all();
+
 
         return $this->render('index', [
-            'data' => $data, // табличные данные
+            'data' => $query->asArray()->all(), // табличные данные
             'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
+            'serviceTotalLabel' => $serviceModel->getTotalLabel(),
             'pages' => $pages, // для пагинатора
-            'validateErrors' => $model->errors,
+            'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
-            'notDisabledMode' => array_unique(array_column($data, 'mode')),
-            'serviceTotalLabel' => sprintf("All (%s)", $serviceModel->getTotalCount()),
+            'disabledMode' => $modeModel->getDisabled($data),
             'paginationCounters' => sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount)
         ]);
     }
