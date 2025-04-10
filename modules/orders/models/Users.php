@@ -2,6 +2,8 @@
 
 namespace app\modules\orders\models;
 
+use app\helpers\DebugHelper;
+
 class Users extends \yii\db\ActiveRecord
 {
     public static function tableName(): string
@@ -10,20 +12,26 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
-     * Возвращает id пользователя по его имени и фамилии
+     * Возвращает список id пользователей по частичным совпадениям имени и фамилии
      *
      * @param string $name
-     * @return int|null
+     * @return array
      */
-    public static function getIdByName(string $name): ?int
+    public static function getIdListByName(string $name): array
     {
-        $nameArr = explode(" ", $name);
+        $name = trim(strtolower($name));
+        $name = preg_replace('/\s+/', ' ', $name);
 
         $query = self::find();
         $query->select(["id"]);
-        $query->andWhere(['first_name' => trim($nameArr[0])]);
-        $query->andWhere(['last_name' => trim($nameArr[1])]);
+        $query->where(['LIKE', "CONCAT(LOWER(first_name), ' ', LOWER(last_name))", '%' . strtolower($name) . '%', false]);
 
-        return $query->scalar();
+        $results = $query->asArray()->all();
+
+        if(!empty($results)) {
+            return array_column($results, 'id');
+        }
+
+        return [0];
     }
 }

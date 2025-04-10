@@ -2,6 +2,7 @@
 
 namespace app\modules\orders\models;
 
+use app\helpers\DebugHelper;
 use yii\db\ActiveQuery;
 
 /**
@@ -44,7 +45,7 @@ class OrdersSearch extends Orders
         }
 
         if ($this->scenario == self::SCENARIO_SEARCH_USER) {
-            $query->andFilterWhere(["user_id" => Users::getIdByName($this->search)]);
+            $query->andFilterWhere(["IN", "user_id", Users::getIdListByName($this->search)]);
         }
 
         $query->orderBy("o.id");
