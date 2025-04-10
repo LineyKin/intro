@@ -38,3 +38,6 @@ tests/_support/_generated
 # db dump
 test_db_structure.sql
 test_db_data.sql
+
+# вёрстка из ТЗ
+modules/orders/views/html

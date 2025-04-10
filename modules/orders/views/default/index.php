@@ -94,7 +94,8 @@ use yii\widgets\LinkPager;
     NavBar::begin([
         'brandLabel' => $brandLabel,
         'brandUrl' => sprintf("/%s/", $moduleName),
-        'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top']
+        'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top'],
+        //'options' => ['class' => 'nav nav-tabs p-b']
     ]);
 
     echo Nav::widget([

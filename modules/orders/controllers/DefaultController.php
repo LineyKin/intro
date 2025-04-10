@@ -13,7 +13,7 @@ use yii\web\Response;
 class DefaultController extends Controller
 {
     const SEARCH_TYPE_PARAM = 'search-type';
-    const ROWS_PER_PAGE = 10;
+    const PER_PAGE_DEFAULT = 4;
     const FILENAME = 'orders.csv';
 
     public $layout = 'main';
@@ -54,7 +54,7 @@ class DefaultController extends Controller
          * пагинатор
          */
         $pages = new Pagination(['totalCount' => $query->count()]);
-        $pages->pageSize = self::ROWS_PER_PAGE;
+        $pages->pageSize = $params['per-page'] ?? self::PER_PAGE_DEFAULT;
         $query->offset($pages->offset)->limit($pages->limit);
         $category = $this->module->id;
 

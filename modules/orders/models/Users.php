@@ -6,6 +6,8 @@ use app\helpers\DebugHelper;
 
 class Users extends \yii\db\ActiveRecord
 {
+
+    const EMPTY_ID_LIST = [0];
     public static function tableName(): string
     {
         return 'users';
@@ -24,7 +26,7 @@ class Users extends \yii\db\ActiveRecord
 
         $query = self::find();
         $query->select(["id"]);
-        $query->where(['LIKE', "CONCAT(LOWER(first_name), ' ', LOWER(last_name))", '%' . strtolower($name) . '%', false]);
+        $query->where(['LIKE', "CONCAT(LOWER(first_name), ' ', LOWER(last_name))", '%' . $name. '%', false]);
 
         $results = $query->asArray()->all();
 
@@ -32,6 +34,6 @@ class Users extends \yii\db\ActiveRecord
             return array_column($results, 'id');
         }
 
-        return [0];
+        return self::EMPTY_ID_LIST;
     }
 }
