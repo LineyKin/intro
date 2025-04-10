@@ -2,88 +2,109 @@
 
 namespace app\modules\orders\models;
 
-use yii\base\Model;
+use app\helpers\DebugHelper;
+use yii\db\ActiveRecord;
 
-class Service extends Model
+class Service extends ActiveRecord
 {
-    public $mode;
-    public $status;
 
-    public  function rules() : array
+    public $service_id;
+
+    public static function tableName() : string {
+        return 'services';
+    }
+
+    public function rules() : array
     {
         return [
-            [['mode'], 'integer'],
-            [['status'], 'string'],
+            ['service_id', 'integer']
         ];
     }
 
     /**
-     * Возвращает сгруппированные данные по услугам и их количеству
+     * Возвращает список услуг
      *
      * @return array
      */
-    public function getGroupData() : array
+    private function getList() :array
     {
-        $query = Orders::find();
-        $query->select([
-            "o.service_id",
-            "s.name",
-            "COUNT(*) AS count",
-        ]);
-        $query->from("orders o");
-        $query->innerJoin("services s", "s.id = o.service_id");
-        $query->andFilterWhere(['mode' => $this->mode]);
-        if (!is_null($this->status)) {
-            $query->andFilterWhere(['status' => Orders::getStatusCode($this->status)]);
-        }
-        $query->groupBy("o.service_id");
-        $query->orderBy('count DESC');
-        $query->asArray();
-
-        $data = $query->all();
-        unset($query);
-
-        $final = [];
-        foreach ($data as $item) {
-            $final[$item['service_id']] = ['count' => $item['count'], 'name' => $item['name']];
-        }
-
-        return $final;
+        return self::find()->asArray()->all();
     }
 
     /**
+     *
+     * Пополняет сгруппированные данные по услугам и их количеству неактивными позициями.
+     *
+     * @param array $data
+     * @return array
+     */
+    private function addDisableItems(array $data) :array
+    {
+        $list = $this->getList();
+
+        foreach ($list as $item) {
+            if (!isset($data[$item['id']])) {
+                $data[$item['id']] = [
+                    'name' => $item['name'],
+                    'count' => 0,
+                    'disabled' => is_null($this->service_id), // всегда true кроме случая, когда фильтруем сами услуги
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * На вход табличные данные
+     *
+     * Возвращает сгруппированные данные по услугам и их количеству
+     *
+     * @param array $data
+     * @return array
+     */
+    public function getGroupData(array $data) :array
+    {
+        $result = [];
+        foreach ($data as $item) {
+            if(!isset($result[$item['service_id']])) {
+                $result[$item['service_id']] = [
+                    'name' => $item['service'],
+                    'count' => 1,
+                    'disabled' => false,
+                ];
+            } else {
+                $result[$item['service_id']]['count']++;
+            }
+        }
+
+        return $this->addDisableItems($result);
+    }
+
+    /**
+     * На вход табличные данные
+     *
      * Возвращает количество всех услуг
      *
+     * @param array $data
      * @return int
      */
-    private function getTotalCount() :int
+    private function getTotalCount(array $data) :int
     {
-        $query = Orders::find();
-        $query->select([
-            "COUNT(*) AS count",
-        ]);
-        $query->from("orders");
-        $query->andFilterWhere(['mode' => $this->mode]);
-        if (!is_null($this->status)) {
-            $query->andFilterWhere(['status' => Orders::getStatusCode($this->status)]);
-        }
-
-        $query->asArray();
-
-        $data = $query->all();
-        unset($query);
-
-        return $data[0]['count'];
+        return array_sum(array_column($data, 'count'));
     }
 
     /**
+     * На вход табличные данные
+     *
      * Возвращает название первого элемента из списка фильтров по сервису
      *
+     * @param array $data
      * @return string
      */
-    public function getTotalLabel() :string
+    public function getTotalLabel(array $data) :string
     {
-        return sprintf("All (%s)", $this->getTotalCount());
+        return sprintf("All (%s)", $this->getTotalCount($data));
     }
 
 }

@@ -163,6 +163,7 @@ use yii\widgets\LinkPager;
                         $item = [
                                 'label' => sprintf('<span class="label-id">%s</span>  %s', $row['count'], $row['name']),
                             'url' => Url::current(['service_id' => $serviceId]),
+                            'disabled' => $row['disabled'],
                         ];
 
                         array_push($items, $item);

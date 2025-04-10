@@ -54,6 +54,7 @@ class DefaultController extends Controller
 
         $query = $order->getQuery();
         $data =  $query->asArray()->all();
+        $serviceGroupData = $serviceModel->getGroupData($data);
 
         /**
          * пагинатор
@@ -65,8 +66,8 @@ class DefaultController extends Controller
 
         return $this->render('index', [
             'data' => $query->asArray()->all(), // табличные данные
-            'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
-            'serviceTotalLabel' => $serviceModel->getTotalLabel(),
+            'serviceGroupData' => $serviceGroupData, // данные для выпадающего списка в столбце "Сервис"
+            'serviceTotalLabel' => $serviceModel->getTotalLabel($serviceGroupData),
             'pages' => $pages, // для пагинатора
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
