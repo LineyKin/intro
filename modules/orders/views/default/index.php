@@ -1,32 +1,14 @@
 <?php
 
 /**
- * labels:
  * @var $serviceTotalLabel
- * @var $modeTotalLabel
- * @var $brandLabel
- *
- * labels: список параметров поиска
- * @var $searchOrderIdLabel
- * @var $searchLinkLabel
- * @var $searchUsernameLabel
- *
- * labels: шапка таблицы
- * @var $thID
- * @var $thUser
- * @var $thLink
- * @var $thQuantity
- * @var $thService
- * @var $thStatus
- * @var $thMode
- * @var $thCreated
- *
  * @var $serviceGroupData
  * @var $data
  * @var $pages
  * @var $validateErrors
  * @var $moduleName
  * @var $paginationCounters
+ * @var $notDisabledMode
  */
 
 use app\modules\orders\models\Orders;
@@ -92,10 +74,9 @@ use yii\widgets\LinkPager;
 <div class="container-fluid">
      <?php
     NavBar::begin([
-        'brandLabel' => $brandLabel,
+        'brandLabel' =>  Yii::t($moduleName, 'All orders'),
         'brandUrl' => sprintf("/%s/", $moduleName),
         'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top'],
-        //'options' => ['class' => 'nav nav-tabs p-b']
     ]);
 
     echo Nav::widget([
@@ -139,13 +120,13 @@ use yii\widgets\LinkPager;
 
             <select class="form-control search-select" name="search-type">
               <option value=<?php echo Orders::SCENARIO_SEARCH_ID?> selected="">
-                  <?php echo $searchOrderIdLabel?>
+                  <?php echo Yii::t($moduleName, 'Order ID')?>
               </option>
               <option value=<?php echo Orders::SCENARIO_SEARCH_LINK?>>
-                  <?php echo $searchLinkLabel?>
+                  <?php echo Yii::t($moduleName, 'Link')?>
               </option>
               <option value=<?php echo Orders::SCENARIO_SEARCH_USER?>>
-                    <?php echo $searchUsernameLabel?>
+                    <?php echo Yii::t($moduleName, 'Username')?>
               </option>
             </select>
 
@@ -153,20 +134,20 @@ use yii\widgets\LinkPager;
             </span>
                 </div>
             </form>
-        </li>
+    </li>
    <?php NavBar::end();?>
 
     <table class="table order-table">
         <thead>
         <tr>
-            <th><?php echo $thID?></th>
-            <th><?php echo $thUser?></th>
-            <th><?php echo $thLink?></th>
-            <th><?php echo $thQuantity?></th>
+            <th>ID</th>
+            <th><?php echo Yii::t($moduleName, 'User')?></th>
+            <th><?php echo Yii::t($moduleName, 'Link')?></th>
+            <th><?php echo Yii::t($moduleName, 'Quantity')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo $thService?>
+                        <?php echo Yii::t($moduleName, 'Service')?>
                         <span class="caret"></span>
                     </button>
                     <?php
@@ -195,15 +176,14 @@ use yii\widgets\LinkPager;
 
                 </div>
             </th>
-            <th><?php echo $thStatus?></th>
+            <th><?php echo Yii::t($moduleName, 'Status')?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        <?php echo $thMode?>
+                        <?php echo Yii::t($moduleName, 'Mode')?>
                         <span class="caret"></span>
                     </button>
                     <?php
-
                     $items = [
                         [
                             'label' => Yii::t($moduleName, "Mode All"),
@@ -226,7 +206,7 @@ use yii\widgets\LinkPager;
                     ?>
                 </div>
             </th>
-            <th><?php echo $thCreated?></th>
+            <th><?php echo Yii::t($moduleName, 'Created')?></th>
         </tr>
         </thead>
         <tbody>

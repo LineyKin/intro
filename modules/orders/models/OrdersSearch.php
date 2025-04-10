@@ -15,7 +15,7 @@ class OrdersSearch extends Orders
     {
         $query = self::find();
         $query->select([
-            "o.id AS id",
+            "o.id",
             "CONCAT(u.first_name, ' ', u.last_name) AS user",
             "o.link",
             "o.quantity",
@@ -52,5 +52,4 @@ class OrdersSearch extends Orders
 
         return $query;
     }
-
 }

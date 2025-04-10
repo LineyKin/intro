@@ -13,7 +13,7 @@ use yii\web\Response;
 class DefaultController extends Controller
 {
     const SEARCH_TYPE_PARAM = 'search-type';
-    const PER_PAGE_DEFAULT = 4;
+    const PER_PAGE_DEFAULT = 10;
     const FILENAME = 'orders.csv';
 
     public $layout = 'main';
@@ -56,35 +56,16 @@ class DefaultController extends Controller
         $pages = new Pagination(['totalCount' => $query->count()]);
         $pages->pageSize = $params['per-page'] ?? self::PER_PAGE_DEFAULT;
         $query->offset($pages->offset)->limit($pages->limit);
-        $category = $this->module->id;
+        $data =  $query->asArray()->all();
 
         return $this->render('index', [
-            'data' => $query->asArray()->all(), // табличные данные
+            'data' => $data, // табличные данные
             'serviceGroupData' => $serviceModel->getGroupData(), // данные для выпадающего списка в столбце "Сервис"
             'pages' => $pages, // для пагинатора
             'validateErrors' => $model->errors,
             'moduleName' => $this->module->id,
-
-            // labels
+            'notDisabledMode' => array_unique(array_column($data, 'mode')),
             'serviceTotalLabel' => sprintf("All (%s)", $serviceModel->getTotalCount()),
-            'modeTotalLabel' => 'All',
-            'brandLabel' => Yii::t($category, 'All orders'),
-
-            // labels: список параметров поиска
-            'searchOrderIdLabel' => Yii::t($category, 'Order ID'),
-            'searchLinkLabel' => Yii::t($category, 'Link'),
-            'searchUsernameLabel' => Yii::t($category, 'Username'),
-
-            // labels: шапка таблицы
-            'thID' => "ID",
-            'thUser' => Yii::t($category, 'User'),
-            'thLink' => Yii::t($category, 'Link'),
-            'thQuantity' => Yii::t($category, 'Quantity'),
-            'thService' => Yii::t($category, 'Service'),
-            'thStatus' => Yii::t($category, 'Status'),
-            'thMode' => Yii::t($category, 'Mode'),
-            'thCreated' => Yii::t($category, 'Created'),
-
             'paginationCounters' => sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount)
         ]);
     }
