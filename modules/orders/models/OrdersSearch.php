@@ -15,15 +15,15 @@ class OrdersSearch extends Orders
     {
         $query = self::find();
         $query->select([
-            "o.id AS ID",
-            "CONCAT(u.first_name, ' ', u.last_name) AS User",
-            "o.link AS Link",
-            "o.quantity AS Quantity",
-            "s.name AS Service",
+            "o.id AS id",
+            "CONCAT(u.first_name, ' ', u.last_name) AS user",
+            "o.link",
+            "o.quantity",
+            "s.name AS service",
             "o.service_id",
-            "o.status AS Status",
-            "o.mode AS Mode",
-            "o.created_at AS Created",
+            "o.status",
+            "o.mode",
+            "o.created_at",
         ]);
         $query->from("orders o");
         $query->innerJoin("users u", "u.id = o.user_id");

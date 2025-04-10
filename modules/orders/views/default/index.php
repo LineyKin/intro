@@ -232,20 +232,20 @@ use yii\widgets\LinkPager;
         <tbody>
         <?php foreach ($data as $row) { ?>
         <tr>
-            <td><?php echo $row['ID']?></td>
-            <td><?php echo $row['User']?></td>
-            <td class="link"><?php echo $row['Link']?></td>
-            <td><?php echo $row['Quantity']?></td>
+            <td><?php echo $row['id']?></td>
+            <td><?php echo $row['user']?></td>
+            <td class="link"><?php echo $row['link']?></td>
+            <td><?php echo $row['quantity']?></td>
             <td class="service">
                 <span class="label-id">
                     <?php echo $serviceGroupData[$row['service_id']]['count'] ?>
-                </span><?php echo $row['Service']?>
+                </span><?php echo $row['service']?>
             </td>
-            <td><?php echo Yii::t($moduleName, Orders::getStatusByCode($row['Status']))?></td>
-            <td><?php echo Yii::t($moduleName, Orders::getModeByCode($row['Mode']))?></td>
+            <td><?php echo Yii::t($moduleName, Orders::getStatusByCode($row['status']))?></td>
+            <td><?php echo Yii::t($moduleName, Orders::getModeByCode($row['mode']))?></td>
             <td>
-                <span class="nowrap"><?php echo date('Y-m-d', $row['Created'])?></span>
-                <span class="nowrap"><?php echo date('H:i:s', $row['Created'])?></span>
+                <span class="nowrap"><?php echo date('Y-m-d', $row['created_at'])?></span>
+                <span class="nowrap"><?php echo date('H:i:s', $row['created_at'])?></span>
             </td>
         </tr>
         <?php } ?>
