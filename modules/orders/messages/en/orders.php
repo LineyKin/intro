@@ -12,7 +12,12 @@ return [
     'Quantity' => 'Quantity',
     'Service' => 'Service',
     'Status' => 'Status',
+
     'Mode' => 'Mode',
+    'Mode All' => 'All',
+    'Auto' => 'Auto',
+    'Manual' => 'Manual',
+
     'Created' => 'Created',
     'Order ID' => 'Order ID',
     'Username' => 'Username',

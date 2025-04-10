@@ -206,15 +206,15 @@ use yii\widgets\LinkPager;
 
                     $items = [
                         [
-                            'label' => $modeTotalLabel,
+                            'label' => Yii::t($moduleName, "Mode All"),
                             'url' => Url::current(['mode' => null]),
                         ],
                         [
-                            'label' => Orders::getModeByCode(Orders::MODE_MANUAL_CODE),
+                            'label' => Yii::t($moduleName, Orders::getModeByCode(Orders::MODE_MANUAL_CODE)),
                             'url' => Url::current(['mode' => Orders::MODE_MANUAL_CODE]),
                         ],
                         [
-                            'label' => Orders::getModeByCode(Orders::MODE_AUTO_CODE),
+                            'label' => Yii::t($moduleName, Orders::getModeByCode(Orders::MODE_AUTO_CODE)),
                             'url' => Url::current(['mode' => Orders::MODE_AUTO_CODE]),
                         ],
                     ];
@@ -241,8 +241,8 @@ use yii\widgets\LinkPager;
                     <?php echo $serviceGroupData[$row['service_id']]['count'] ?>
                 </span><?php echo $row['Service']?>
             </td>
-            <td><?php echo Orders::getStatusByCode($row['Status'])?></td>
-            <td><?php echo Orders::getModeByCode($row['Mode'])?></td>
+            <td><?php echo Yii::t($moduleName, Orders::getStatusByCode($row['Status']))?></td>
+            <td><?php echo Yii::t($moduleName, Orders::getModeByCode($row['Mode']))?></td>
             <td>
                 <span class="nowrap"><?php echo date('Y-m-d', $row['Created'])?></span>
                 <span class="nowrap"><?php echo date('H:i:s', $row['Created'])?></span>
