@@ -36,6 +36,7 @@ class DefaultController extends Controller
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
             $order->scenario = $params[self::SEARCH_TYPE_PARAM];
             $service->searchType = $params[self::SEARCH_TYPE_PARAM];
+            $mode->searchType = $params[self::SEARCH_TYPE_PARAM];
         }
 
         $order->setAttributes($params);
@@ -53,7 +54,7 @@ class DefaultController extends Controller
         }
 
         $query = $order->getQuery();
-        $data = $query->asArray()->all();
+        //$data = $query->asArray()->all();
         $serviceGroupData = $service->getGroupData();
 
         /**
@@ -70,7 +71,7 @@ class DefaultController extends Controller
             'pages' => $pages, // для пагинатора
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
-            'disabledMode' => $mode->getDisabled($data),
+            'disabledMode' => $mode->getDisabled(),
             'paginationCounters' => $pages->getPaginationCounters(),
         ]);
     }

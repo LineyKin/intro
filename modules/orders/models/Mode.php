@@ -8,6 +8,10 @@ use yii\base\Model;
 class Mode extends Model
 {
     public $mode;
+    public $service_id;
+    public $searchType;
+    public $search;
+    public $status;
 
     const MANUAL_CODE = 0;
     const AUTO_CODE = 1;
@@ -16,10 +20,10 @@ class Mode extends Model
         self::AUTO_CODE => "Auto",
     ];
 
-    public function rules()
+    public function rules() : array
     {
         return [
-            [['mode'], 'integer'],
+            [['service_id', 'status', 'search', 'searchType', 'mode'], 'safe']
         ];
     }
 
@@ -35,21 +39,47 @@ class Mode extends Model
     }
 
     /**
-     * Принимает на вход табличные данные заказов.
      * Возвращает список активных и неактивных пунктов в фильтре
      *
      * @param array $data
      * @return array
      */
-    public function getDisabled(array $data) :array
+    public function getDisabled() :array
     {
-        $availableMode = array_unique(array_column($data, 'mode'));
+        $query = Orders::find();
+        $query->select([
+            "mode",
+        ]);
+        $query->from("orders");
+        $query->groupBy("mode");
 
-        $res = [];
-        foreach (self::LIST as $code => $mode) {
-            $res[$code] = !in_array($code, $availableMode) && is_null($this->mode);
+        if (!is_null($this->status)) {
+            $query->andFilterWhere(['status' => Orders::getStatusCode($this->status)]);
         }
 
-        return $res;
+        $query->andFilterWhere(['service_id' => $this->service_id]);
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_ID) {
+            $query->andFilterWhere(["id" => $this->search]);
+        }
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_LINK) {
+            $query->andFilterWhere(["link" => trim($this->search)]);
+        }
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_USER) {
+            $query->andFilterWhere(["IN", "user_id", Users::getIdListByName($this->search)]);
+        }
+
+        $result = $query->asArray()->all();
+        $result = array_column($result, 'mode');
+
+        $final = [];
+
+        foreach (self::LIST as $code => $mode) {
+            $final[$code] = !in_array($code, $result);
+        }
+
+        return $final;
     }
 }
