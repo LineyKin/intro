@@ -35,6 +35,7 @@ class DefaultController extends Controller
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
             $order->scenario = $params[self::SEARCH_TYPE_PARAM];
+            $service->searchType = $params[self::SEARCH_TYPE_PARAM];
         }
 
         $order->setAttributes($params);
@@ -53,7 +54,7 @@ class DefaultController extends Controller
 
         $query = $order->getQuery();
         $data = $query->asArray()->all();
-        $serviceGroupData = $service->getGroupData($data);
+        $serviceGroupData = $service->getGroupData();
 
         /**
          * пагинатор

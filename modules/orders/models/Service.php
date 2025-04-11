@@ -9,6 +9,10 @@ class Service extends ActiveRecord
 {
 
     public $service_id;
+    public $searchType;
+    public $search;
+    public $status;
+    public $mode;
 
     public static function tableName() : string {
         return 'services';
@@ -17,7 +21,7 @@ class Service extends ActiveRecord
     public function rules() : array
     {
         return [
-            ['service_id', 'integer']
+            [['service_id', 'status', 'search', 'searchType', 'mode'], 'safe']
         ];
     }
 
@@ -47,7 +51,7 @@ class Service extends ActiveRecord
                 $data[$item['id']] = [
                     'name' => $item['name'],
                     'count' => 0,
-                    'disabled' => is_null($this->service_id), // всегда true кроме случая, когда фильтруем сами услуги
+                    'disabled' => true
                 ];
             }
         }
@@ -55,36 +59,52 @@ class Service extends ActiveRecord
         return $data;
     }
 
-    /**
-     * На вход табличные данные
-     *
-     * Возвращает сгруппированные данные по услугам и их количеству
-     *
-     * @param array $data
-     * @return array
-     */
-    public function getGroupData(array $data) :array
+    public function getGroupData() :array
     {
-        $result = [];
-        foreach ($data as $item) {
-            if(!isset($result[$item['service_id']])) {
-                $result[$item['service_id']] = [
-                    'name' => $item['service'],
-                    'count' => 1,
-                    'disabled' => false,
-                ];
-            } else {
-                $result[$item['service_id']]['count']++;
-            }
+        $query = self::find();
+        $query->select([
+            "s.id AS service_id",
+            "s.name AS service",
+            "COUNT(*) AS count",
+        ]);
+
+        $query->from("services s");
+        $query->innerJoin("orders o", "o.service_id = s.id");
+        $query->groupBy("o.service_id");
+        $query->orderBy("count DESC");
+
+        if (!is_null($this->status)) {
+            $query->andFilterWhere(['o.status' => Orders::getStatusCode($this->status)]);
         }
 
-        // сортируем по убыванию
-        uasort($result, function($a, $b) {
-            return $b['count'] - $a['count'];
-        });
+        $query->andFilterWhere(['o.mode' => $this->mode]);
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_ID) {
+            $query->andFilterWhere(["o.id" => $this->search]);
+        }
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_LINK) {
+            $query->andFilterWhere(["link" => trim($this->search)]);
+        }
+
+        if ($this->searchType == Orders::SCENARIO_SEARCH_USER) {
+            $query->andFilterWhere(["IN", "user_id", Users::getIdListByName($this->search)]);
+        }
+
+        $data = $query->asArray()->all();
+
+        $result = [];
+        foreach ($data as $item) {
+            $result[$item['service_id']] = [
+                'name' => $item['service'],
+                'count' => $item['count'],
+                'disabled' => false,
+            ];
+        }
 
         return $this->addDisableItems($result);
     }
+
 
     /**
      * На вход табличные данные
