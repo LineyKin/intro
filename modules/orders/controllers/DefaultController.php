@@ -4,9 +4,9 @@ namespace app\modules\orders\controllers;
 
 use app\helpers\DebugHelper;
 use app\modules\orders\models\Mode;
+use app\modules\orders\models\OrdersPagination;
 use app\modules\orders\models\OrdersSearch;
 use app\modules\orders\models\Service;
-use yii\data\Pagination;
 use yii\web\Controller;
 use Yii;
 use yii\web\Response;
@@ -14,7 +14,6 @@ use yii\web\Response;
 class DefaultController extends Controller
 {
     const SEARCH_TYPE_PARAM = 'search-type';
-    const PER_PAGE_DEFAULT = 10;
     const FILENAME = 'orders.csv';
 
     public $layout = 'main';
@@ -59,8 +58,8 @@ class DefaultController extends Controller
         /**
          * пагинатор
          */
-        $pages = new Pagination(['totalCount' => $query->count()]);
-        $pages->pageSize = $params['per-page'] ?? self::PER_PAGE_DEFAULT;
+        $pages = new OrdersPagination(['totalCount' => $query->count()]);
+        $pages->setPerPage($params);
         $query->offset($pages->offset)->limit($pages->limit);
 
         return $this->render('index', [
@@ -71,7 +70,7 @@ class DefaultController extends Controller
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
             'disabledMode' => $mode->getDisabled($data),
-            'paginationCounters' => sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount)
+            'paginationCounters' => $pages->getPaginationCounters(),
         ]);
     }
 

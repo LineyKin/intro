@@ -2898,7 +2898,6 @@ input[type="checkbox"].selectOrder{
   }
   .custom-search .input-group{
     padding-right: 35px;
-    display: block !important;
   }
   .nav-tabs>li{
     width: 100%;
