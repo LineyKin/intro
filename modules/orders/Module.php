@@ -23,8 +23,5 @@ class Module extends \yii\base\Module
                 'orders' => 'orders.php',
             ],
         ];
-
-        // Конфигурация модуля
-        Yii::configure($this, require __DIR__ . '/config.php');
     }
 }

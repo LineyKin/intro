@@ -50,7 +50,6 @@ class Mode extends Model
         $query->select([
             "mode",
         ]);
-        $query->from("orders");
         $query->groupBy("mode");
 
         if (!is_null($this->status)) {

@@ -54,7 +54,6 @@ class DefaultController extends Controller
         }
 
         $query = $order->getQuery();
-        //$data = $query->asArray()->all();
         $serviceGroupData = $service->getGroupData();
 
         /**
