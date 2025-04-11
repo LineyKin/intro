@@ -31,19 +31,19 @@ class DefaultController extends Controller
 
         $params = Yii::$app->request->queryParams;
         $order = new OrdersSearch();
-        $serviceModel = new Service();
-        $modeModel = new Mode();
+        $service = new Service();
+        $mode = new Mode();
 
         if (isset($params[self::SEARCH_TYPE_PARAM])) {
             $order->scenario = $params[self::SEARCH_TYPE_PARAM];
         }
 
         $order->setAttributes($params);
-        $serviceModel->setAttributes($params);
-        $modeModel->setAttributes($params);
+        $service->setAttributes($params);
+        $mode->setAttributes($params);
 
         $order->validate();
-        $modeModel->validate();
+        $mode->validate();
 
         /**
          * скачиваем csv-файл
@@ -53,8 +53,8 @@ class DefaultController extends Controller
         }
 
         $query = $order->getQuery();
-        $data =  $query->asArray()->all();
-        $serviceGroupData = $serviceModel->getGroupData($data);
+        $data = $query->asArray()->all();
+        $serviceGroupData = $service->getGroupData($data);
 
         /**
          * пагинатор
@@ -63,15 +63,14 @@ class DefaultController extends Controller
         $pages->pageSize = $params['per-page'] ?? self::PER_PAGE_DEFAULT;
         $query->offset($pages->offset)->limit($pages->limit);
 
-
         return $this->render('index', [
             'data' => $query->asArray()->all(), // табличные данные
             'serviceGroupData' => $serviceGroupData, // данные для выпадающего списка в столбце "Сервис"
-            'serviceTotalLabel' => $serviceModel->getTotalLabel($serviceGroupData),
+            'serviceTotalLabel' => $service->getTotalLabel($serviceGroupData),
             'pages' => $pages, // для пагинатора
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
-            'disabledMode' => $modeModel->getDisabled($data),
+            'disabledMode' => $mode->getDisabled($data),
             'paginationCounters' => sprintf('%s to %s of %s', $pages->page * $pages->pageSize + 1, ($pages->page + 1) * $pages->pageSize, $pages->totalCount)
         ]);
     }

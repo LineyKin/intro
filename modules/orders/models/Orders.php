@@ -35,9 +35,9 @@ class Orders extends ActiveRecord
     {
         return [
             self::SCENARIO_DEFAULT => ['status', 'service_id', 'mode'],
-            self::SCENARIO_SEARCH_ID => ['status', 'search'],
-            self::SCENARIO_SEARCH_LINK => ['status', 'search'],
-            self::SCENARIO_SEARCH_USER => ['status', 'search'],
+            self::SCENARIO_SEARCH_ID => ['status', 'service_id', 'mode', 'search'],
+            self::SCENARIO_SEARCH_LINK => ['status', 'service_id', 'mode', 'search'],
+            self::SCENARIO_SEARCH_USER => ['status', 'service_id', 'mode', 'search'],
         ];
     }
 
@@ -50,7 +50,7 @@ class Orders extends ActiveRecord
 
             [['search'], 'string', 'on' => self::SCENARIO_SEARCH_LINK],
 
-            [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_USER],
+            [['search', 'service_id'], 'integer', 'on' => self::SCENARIO_SEARCH_USER],
         ];
     }
 
