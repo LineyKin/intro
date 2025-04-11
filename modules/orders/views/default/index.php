@@ -71,7 +71,7 @@ use yii\widgets\LinkPager;
     </div>
 </nav>
 <div class="container-fluid">
-    <ul class="nav nav-tabs p-b">
+    <ul id="status_navbar" class="nav nav-tabs p-b">
         <li class=<?= Yii::$app->request->url == sprintf("/%s/", $moduleName) ? 'active' : '' ?>>
             <a href=<?php echo sprintf("/%s/", $moduleName) ?>>
                 <?php echo Yii::t($moduleName, 'All orders')?>
