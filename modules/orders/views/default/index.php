@@ -14,8 +14,6 @@
 use app\modules\orders\models\Mode;
 use app\modules\orders\models\Orders;
 use yii\bootstrap5\Dropdown;
-use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -73,47 +71,30 @@ use yii\widgets\LinkPager;
     </div>
 </nav>
 <div class="container-fluid">
-     <?php
-    NavBar::begin([
-        'brandLabel' =>  Yii::t($moduleName, 'All orders'),
-        'brandUrl' => sprintf("/%s/", $moduleName),
-        'options' => ['class' => 'nav navbar-expand-md nav-tabs p-b fixed-top'],
-    ]);
+    <ul class="nav nav-tabs p-b">
+        <li class=<?= Yii::$app->request->url == sprintf("/%s/", $moduleName) ? 'active' : '' ?>>
+            <a href=<?php echo sprintf("/%s/", $moduleName) ?>>
+                <?php echo Yii::t($moduleName, 'All orders')?>
+            </a>
+        </li>
+        <?php foreach (Orders::STATUS_LIST as $status) { ?>
+        <li class=<?= strpos(Yii::$app->request->url, $status) !== false ? 'active' : '' ?>>
+            <a href=<?php echo sprintf("/%s/%s", $moduleName, $status)?>>
+                <?php echo Yii::t($moduleName, $status)?>
+            </a>
+        </li>
+        <?php } ?>
+        <li>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <?= Yii::t($moduleName, 'Language') ?> <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="<?= Yii::$app->urlManager->createUrl(['/orders/change-language', 'lang' => 'en']) ?>">English</a></li>
+                <li><a href="<?= Yii::$app->urlManager->createUrl(['/orders/change-language', 'lang' => 'ru']) ?>">Русский</a></li>
+            </ul>
+        </li>
 
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            [
-                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_PENDING_CODE)),
-                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_PENDING_CODE)]
-            ],
-            [
-                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_IN_PROGRESS_CODE)),
-                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_IN_PROGRESS_CODE)]
-            ],
-            [
-                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_COMPLETE_CODE)),
-                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_COMPLETE_CODE)]
-            ],
-            [
-                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_CANCEL_CODE)),
-                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_CANCEL_CODE)]
-            ],
-            [
-                    'label' => Yii::t($moduleName, Orders::getStatusByCode(Orders::STATUS_FAIL_CODE)),
-                    'url' => [Orders::getStatusRouteByCode(Orders::STATUS_FAIL_CODE)]
-            ],
-            [
-                'label' => Yii::t($moduleName, 'Language'),
-                'items' => [
-                    ['label' => 'English', 'url' => ['/orders/change-language', 'lang' => 'en']],
-                    ['label' => 'Русский', 'url' => ['/orders/change-language', 'lang' => 'ru']],
-                ],
-            ],
-        ]
-    ]); ?>
-
-    <li class="pull-right custom-search">
+        <li class="pull-right custom-search">
             <form class="form-inline" action=<?php echo $_SERVER['REQUEST_URI']?>>
                 <div class="input-group">
                     <input type="text" name="search" class="form-control" value="" placeholder="Search orders" required>
@@ -135,9 +116,8 @@ use yii\widgets\LinkPager;
             </span>
                 </div>
             </form>
-    </li>
-   <?php NavBar::end();?>
-
+        </li>
+    </ul>
     <table class="table order-table">
         <thead>
         <tr>
@@ -162,8 +142,8 @@ use yii\widgets\LinkPager;
                     foreach ($serviceGroupData as $serviceId => $row) {
                         $item = [
                                 'label' => sprintf('<span class="label-id">%s</span>  %s', $row['count'], $row['name']),
-                            'url' => Url::current(['service_id' => $serviceId]),
-                            'disabled' => $row['disabled'],
+                                'url' => Url::current(['service_id' => $serviceId]),
+                                'disabled' => $row['disabled'],
                         ];
 
                         array_push($items, $item);
@@ -261,7 +241,6 @@ use yii\widgets\LinkPager;
         <div class="col-sm-4 pagination-counters">
             <?php echo $paginationCounters; ?>
         </div>
-
     </div>
 </div>
 <script src="js/jquery.min.js"></script>

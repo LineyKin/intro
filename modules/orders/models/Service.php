@@ -78,14 +78,12 @@ class Service extends ActiveRecord
             }
         }
 
-        $result = $this->addDisableItems($result);
-
         // сортируем по убыванию
         uasort($result, function($a, $b) {
             return $b['count'] - $a['count'];
         });
 
-        return $result;
+        return $this->addDisableItems($result);
     }
 
     /**
