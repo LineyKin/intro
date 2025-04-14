@@ -6,8 +6,6 @@ use app\helpers\DebugHelper;
 
 class Users extends \yii\db\ActiveRecord
 {
-
-    const EMPTY_ID_LIST = [0];
     public static function tableName(): string
     {
         return 'users';
@@ -19,7 +17,7 @@ class Users extends \yii\db\ActiveRecord
      * @param string $name
      * @return array
      */
-    public static function getIdListByName(string $name): array
+    public static function getIdListByName(string $name): array|bool
     {
         $name = trim(strtolower($name));
         $name = preg_replace('/\s+/', ' ', $name);
@@ -30,10 +28,6 @@ class Users extends \yii\db\ActiveRecord
 
         $results = $query->asArray()->all();
 
-        if(!empty($results)) {
-            return array_column($results, 'id');
-        }
-
-        return self::EMPTY_ID_LIST;
+        return empty($results) ? false : array_column($results, 'id');
     }
 }

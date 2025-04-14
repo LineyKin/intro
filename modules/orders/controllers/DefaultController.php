@@ -77,7 +77,17 @@ class DefaultController extends Controller
         ]);
     }
 
-    private function buildServiceListItems($serviceGroupData, $serviceTotalLabel, $serviceId)  :array
+
+    /**
+     *
+     * собирает массив-аргумент в Dropdown::widget во view
+     *
+     * @param array $serviceGroupData
+     * @param string $serviceTotalLabel
+     * @param int|null $serviceId
+     * @return array[]
+     */
+    private function buildServiceListItems(array $serviceGroupData, string $serviceTotalLabel, int|null $serviceId)  :array
     {
         $items = [
             [
