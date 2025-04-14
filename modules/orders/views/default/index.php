@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @var $serviceTotalLabel
+ * @var $serviceListItems
  * @var $serviceGroupData
  * @var $data
  * @var $pages
@@ -132,30 +132,12 @@ use yii\widgets\LinkPager;
                         <span class="caret"></span>
                     </button>
                     <?php
-                    $items = [
-                        [
-                            'label' => $serviceTotalLabel,
-                            'url' => Url::current(['service_id' => null]),
-                        ],
-                    ];
-
-                    foreach ($serviceGroupData as $serviceId => $row) {
-                        $item = [
-                                'label' => sprintf('<span class="label-id">%s</span>  %s', $row['count'], $row['name']),
-                                'url' => Url::current(['service_id' => $serviceId]),
-                                'disabled' => $row['disabled'],
-                        ];
-
-                        array_push($items, $item);
-                    }
-
                     echo Dropdown::widget([
-                        'items' => $items,
+                        'items' => $serviceListItems,
                         'options' => ['class' => 'dropdown-menu'],
                         'encodeLabels' => false,
                     ]);
                     ?>
-
                 </div>
             </th>
             <th><?php echo Yii::t($moduleName, 'Status')?></th>

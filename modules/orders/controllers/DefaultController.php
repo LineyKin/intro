@@ -10,6 +10,7 @@ use app\modules\orders\models\Service;
 use yii\web\Controller;
 use Yii;
 use yii\web\Response;
+use yii\helpers\Url;
 
 class DefaultController extends Controller
 {
@@ -65,14 +66,38 @@ class DefaultController extends Controller
 
         return $this->render('index', [
             'data' => $query->asArray()->all(), // табличные данные
-            'serviceGroupData' => $serviceGroupData, // данные для выпадающего списка в столбце "Сервис"
-            'serviceTotalLabel' => $service->getTotalLabel($serviceGroupData),
+            'serviceGroupData' => $serviceGroupData,
+            'serviceListItems' => $this->buildServiceListItems($serviceGroupData, $service->getTotalLabel($serviceGroupData), $service->service_id),
             'pages' => $pages, // для пагинатора
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
             'disabledMode' => $mode->getDisabled(),
             'paginationCounters' => $pages->getPaginationCounters(),
         ]);
+    }
+
+    private function buildServiceListItems($serviceGroupData, $serviceTotalLabel, $serviceId)  :array
+    {
+        $items = [
+            [
+                'label' => $serviceTotalLabel,
+                'url' => Url::current(['service_id' => null]),
+                'active' => is_null($serviceId)
+            ],
+        ];
+
+        foreach ($serviceGroupData as $id => $row) {
+            $item = [
+                'label' => sprintf('<span class="label-id">%s</span>  %s', $row['count'], $row['name']),
+                'url' => Url::current(['service_id' => $id]),
+                'disabled' => $row['disabled'],
+                'active' => $id == $serviceId,
+            ];
+
+            $items[] = $item;
+        }
+
+        return $items;
     }
 
     /**
