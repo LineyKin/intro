@@ -9,6 +9,7 @@
  * @var $moduleName
  * @var $paginationCounters
  * @var $disabledMode
+ * @var $activeModeId
  */
 
 use app\modules\orders\models\Mode;
@@ -152,16 +153,19 @@ use yii\widgets\LinkPager;
                         [
                             'label' => Yii::t($moduleName, "Mode All"),
                             'url' => Url::current(['mode' => null]),
+                            'active' => is_null($activeModeId)
                         ],
                         [
                             'label' => Yii::t($moduleName, Mode::getByCode(Mode::MANUAL_CODE)),
                             'url' => Url::current(['mode' => Mode::MANUAL_CODE]),
                             'disabled' => $disabledMode[Mode::MANUAL_CODE],
+                            'active' => $activeModeId === Mode::MANUAL_CODE
                         ],
                         [
                             'label' => Yii::t($moduleName, Mode::getByCode(Mode::AUTO_CODE)),
                             'url' => Url::current(['mode' => Mode::AUTO_CODE]),
                             'disabled' => $disabledMode[Mode::AUTO_CODE],
+                            'active' => $activeModeId === Mode::AUTO_CODE
                         ],
                     ];
 

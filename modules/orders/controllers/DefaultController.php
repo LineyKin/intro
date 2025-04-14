@@ -72,6 +72,7 @@ class DefaultController extends Controller
             'validateErrors' => $order->errors,
             'moduleName' => $this->module->id,
             'disabledMode' => $mode->getDisabled(),
+            'activeModeId' => $mode->getCode(),
             'paginationCounters' => $pages->getPaginationCounters(),
         ]);
     }

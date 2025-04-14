@@ -27,6 +27,11 @@ class Mode extends Model
         ];
     }
 
+    public function getCode() :int|null
+    {
+        return is_null($this->mode) ? null : (int) $this->mode;
+    }
+
     /**
      * Возвращает режим по коду
      *
