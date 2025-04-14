@@ -3,8 +3,10 @@
 namespace app\modules\orders\models;
 
 use app\helpers\DebugHelper;
+use yii\base\InvalidParamException;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\NotFoundHttpException;
 
 class Orders extends ActiveRecord
 {
@@ -44,6 +46,9 @@ class Orders extends ActiveRecord
     public function rules() : array
     {
         return [
+
+            ['status', 'in', 'range' => self::STATUS_LIST],
+
             [['mode', 'service_id'], 'integer', 'on' => self::SCENARIO_DEFAULT],
 
             [['search'], 'integer', 'on' => self::SCENARIO_SEARCH_ID],
@@ -76,14 +81,26 @@ class Orders extends ActiveRecord
      *
      * @param string $status
      * @return int
+     * @throws NotFoundHttpException
      */
     public static function getStatusCode(string $status): int
     {
-        return array_flip(self::STATUS_LIST)[$status];
+        $flippedArray = array_flip(self::STATUS_LIST);
+        if (!isset($flippedArray[$status])) {
+            throw new NotFoundHttpException("Ошибка роутинга");
+        }
+
+        return $flippedArray[$status];
     }
 
-    public static function getStatusRouteByCode(int $code) : string
-    {
-        return sprintf('/orders/%s', self::getStatusByCode($code));
+    public function getValidationErrorMessage() : string {
+        $message = "";
+        if (!$this->validate()) {
+            foreach ($this->errors as $attr => $error) {
+                $message .= sprintf('%s: %s', $attr, implode(', ', $error));
+            }
+        }
+
+        return $message;
     }
 }

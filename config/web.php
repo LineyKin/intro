@@ -24,7 +24,7 @@ $config = [
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'orders/default/error',
         ],
         'mailer' => [
             'class' => \yii\symfonymailer\Mailer::class,

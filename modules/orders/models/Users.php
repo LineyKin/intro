@@ -15,7 +15,7 @@ class Users extends \yii\db\ActiveRecord
      * Возвращает список id пользователей по частичным совпадениям имени и фамилии
      *
      * @param string $name
-     * @return array
+     * @return array|bool
      */
     public static function getIdListByName(string $name): array|bool
     {

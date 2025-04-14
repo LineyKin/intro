@@ -19,6 +19,15 @@ class DefaultController extends Controller
 
     public $layout = 'main';
 
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
+
     public function actionIndex(): string
     {
         /**
@@ -44,8 +53,6 @@ class DefaultController extends Controller
         $service->setAttributes($params);
         $mode->setAttributes($params);
 
-        $order->validate();
-        $mode->validate();
 
         /**
          * скачиваем csv-файл
@@ -69,7 +76,7 @@ class DefaultController extends Controller
             'serviceGroupData' => $serviceGroupData,
             'serviceListItems' => $this->buildServiceListItems($serviceGroupData, $service->getTotalLabel($serviceGroupData), $service->service_id),
             'pages' => $pages, // для пагинатора
-            'validateErrors' => $order->errors,
+            'validateErrors' => $order->getValidationErrorMessage(),
             'moduleName' => $this->module->id,
             'disabledMode' => $mode->getDisabled(),
             'activeModeId' => $mode->getCode(),
