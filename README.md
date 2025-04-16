@@ -31,6 +31,11 @@ docker exec -ti intro_app bash
 composer install
 ```
 
+Если вы работаете на Windows, то запускаем в контейнере команду
+```rb
+sed -i 's/\r$//' /app/yii
+```
+
 В контейнере запускаем миграции
 ```rb
 ./yii migrate
